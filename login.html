@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Login | Coldeporte</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/script.js" defer></script>
+</head>
+
+<body>
+
+  <main class="container">
+    <div class="card">
+      <div class="brand-header">
+        <div class="logo">Coldeporte 🏃‍♂️</div>
+        <p>Tu bienestar, nuestra meta</p>
+      </div>
+
+      <h1>Iniciar sesión</h1>
+
+      <form action="/login" method="POST">
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" name="password" required autocomplete="current-password">
+        </div>
+
+        <button type="submit">Entrar</button>
+
+        <div class="utility-links">
+          <span></span>
+          <a href="/recover">¿Olvidaste tu contraseña?</a>
+        </div>
+      </form>
+
+      <p>
+        ¿No tienes cuenta?
+        <a href="/register">Regístrate</a>
+      </p>
+    </div>
+  </main>
+
+</body>
+
+</html>

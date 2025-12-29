@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Perfil | Coldeporte</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <script src="/script.js" defer></script>
+</head>
+
+<body class="dashboard-body">
+
+    <nav class="dashboard-nav">
+        <div class="logo">Coldeporte 🏃‍♂️</div>
+
+        <div class="nav-links">
+            <a href="/dashboard" class="nav-link">Inicio</a>
+            <a href="/activities" class="nav-link">Actividades</a>
+            <a href="/profile" class="nav-link active">Mi Perfil</a>
+        </div>
+
+        <a href="/logout" class="button logout-btn">Cerrar Sesión</a>
+    </nav>
+
+    <main class="dashboard-content">
+        <div class="card">
+            <h1>Mi Perfil 👤</h1>
+
+            <div style="text-align: left; margin-bottom: 20px;">
+                <div class="form-group">
+                    <label>Nombre:</label>
+                    <input type="text" value="Usuario de Ejemplo" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Correo Electrónico:</label>
+                    <input type="email" value="usuario@ejemplo.com" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Rol:</label>
+                    <input type="text" value="Trabajador / Usuario" disabled>
+                </div>
+            </div>
+
+            <button onclick="alert('Funcionalidad de editar próximamente')" style="max-width: 200px;">Editar
+                Perfil</button>
+
+            <p style="margin-top: 30px;">
+                <a href="/schedule">📅 Ver Mi Horario Laboral</a>
+            </p>
+        </div>
+    </main>
+
+</body>
+
+</html>

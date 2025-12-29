@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Horario | Coldeporte</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <script src="/script.js" defer></script>
+    <style>
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .schedule-table th,
+        .schedule-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: center;
+        }
+
+        .schedule-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .schedule-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+
+<body class="dashboard-body">
+
+    <nav class="dashboard-nav">
+        <div class="logo">Coldeporte 🏃‍♂️</div>
+
+        <div class="nav-links">
+            <a href="/dashboard" class="nav-link">Inicio</a>
+            <a href="/activities" class="nav-link">Actividades</a>
+            <a href="/profile" class="nav-link">Mi Perfil</a>
+        </div>
+
+        <a href="/logout" class="button logout-btn">Cerrar Sesión</a>
+    </nav>
+
+    <main class="dashboard-content">
+        <div class="card" style="max-width: 1000px;">
+            <h1>Mi Horario Laboral 📅</h1>
+            <p>Subgerencia de Escenarios Deportivos</p>
+
+            <div style="overflow-x: auto;">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Día</th>
+                            <th>Entrada</th>
+                            <th>Salida</th>
+                            <th>Lugar / Actividad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Lunes</td>
+                            <td>7:00 AM</td>
+                            <td>4:00 PM</td>
+                            <td>Oficina Central</td>
+                        </tr>
+                        <tr>
+                            <td>Martes</td>
+                            <td>8:00 AM</td>
+                            <td>5:00 PM</td>
+                            <td>Supervisión - Polideportivo</td>
+                        </tr>
+                        <tr>
+                            <td>Miércoles</td>
+                            <td>7:00 AM</td>
+                            <td>4:00 PM</td>
+                            <td>Oficina Central</td>
+                        </tr>
+                        <tr>
+                            <td>Jueves</td>
+                            <td>8:00 AM</td>
+                            <td>5:00 PM</td>
+                            <td>Supervisión - Canchas Sur</td>
+                        </tr>
+                        <tr>
+                            <td>Viernes</td>
+                            <td>7:00 AM</td>
+                            <td>3:00 PM</td>
+                            <td>Reunión Equipo / Oficina</td>
+                        </tr>
+                        <tr>
+                            <td>Sábado</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>Descanso</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p style="margin-top: 30px;">
+                <a href="/profile">← Volver al Perfil</a>
+            </p>
+        </div>
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro | Coldeporte</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/script.js" defer></script>
+</head>
+
+<body>
+
+  <main class="container">
+    <div class="card">
+      <div class="brand-header">
+        <div class="logo">Coldeporte 🏃‍♂️</div>
+        <p>Únete a la comunidad</p>
+      </div>
+      <h1>Registro de Usuario</h1>
+
+      <!-- Formulario de registro -->
+      <form action="/register" method="POST">
+        <div class="form-group">
+          <label for="reg-email">Email:</label>
+          <input type="email" id="reg-email" name="email" required placeholder="tu@email.com">
+        </div>
+
+        <div class="form-group">
+          <label for="reg-password">Contraseña:</label>
+          <input type="password" id="reg-password" name="password" required>
+        </div>
+
+        <button type="submit">Registrar</button>
+      </form>
+
+      <p>
+        ¿Ya tienes cuenta?
+        <a href="/">Iniciar sesión</a>
+      </p>
+    </div>
+  </main>
+
+</body>
+
+</html>

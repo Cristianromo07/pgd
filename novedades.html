@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Reportar Novedad | Coldeporte</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <script src="/script.js" defer></script>
+</head>
+
+<body class="dashboard-body">
+
+    <nav class="dashboard-nav">
+        <div class="logo">Coldeporte 🏃‍♂️</div>
+
+        <div class="nav-links">
+            <a href="/dashboard" class="nav-link">Inicio</a>
+            <a href="/activities" class="nav-link">Actividades</a>
+            <a href="/profile" class="nav-link">Mi Perfil</a>
+        </div>
+
+        <a href="/logout" class="button logout-btn">Cerrar Sesión</a>
+    </nav>
+
+    <main class="dashboard-content">
+        <div class="card">
+            <h1>Reportar Novedad 📝</h1>
+            <p>Registra incidencias o novedades en los escenarios deportivos.</p>
+
+            <form action="/dashboard" style="text-align: left; margin-top: 20px;">
+                <div class="form-group">
+                    <label for="scenario">Escenario Deportivo:</label>
+                    <select id="scenario" name="scenario"
+                        style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
+                        <option>Cancha Multifuncional</option>
+                        <option>Piscina Olímpica</option>
+                        <option>Gimnasio al Aire Libre</option>
+                        <option>Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="type">Tipo de Novedad:</label>
+                    <select id="type" name="type"
+                        style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
+                        <option>Mantenimiento Requerido</option>
+                        <option>Daño de infraestructura</option>
+                        <option>Insumos faltantes</option>
+                        <option>Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Descripción:</label>
+                    <textarea id="description" rows="4"
+                        style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit;"></textarea>
+                </div>
+
+                <button type="button" onclick="alert('Novedad registrada correctamente (Simulación)')">Registrar
+                    Novedad</button>
+            </form>
+
+            <p style="margin-top: 30px;">
+                <a href="/dashboard">← Cancelar</a>
+            </p>
+        </div>
+    </main>
+
+</body>
+
+</html>

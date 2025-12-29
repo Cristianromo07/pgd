@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard | Coldeporte</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/script.js" defer></script>
+</head>
+
+<body class="dashboard-body">
+
+  <nav class="dashboard-nav">
+    <div class="logo">Coldeporte 🏃‍♂️</div>
+
+    <div class="nav-links">
+      <a href="/dashboard" class="nav-link active">Inicio</a>
+      <a href="/activities" class="nav-link">Actividades</a>
+      <a href="/profile" class="nav-link">Mi Perfil</a>
+    </div>
+
+    <a href="/logout" class="button logout-btn">Cerrar Sesión</a>
+  </nav>
+
+  <main class="dashboard-content">
+    <div class="card">
+      <h1>Bienvenido 👋</h1>
+      <p>Has iniciado sesión correctamente.</p>
+      <p style="margin-top: 10px;">
+        Aquí encontrarás recursos para tu bienestar y actividades deportivas en Itagüí.
+      </p>
+
+      <div class="actions-grid">
+        <a href="/activities" class="action-card">
+          <span class="action-icon">🧘</span>
+          <span class="action-title">Ver Actividades</span>
+          <span class="action-desc">Explora clases y eventos disponibles.</span>
+        </a>
+        <a href="/scenarios" class="action-card">
+          <span class="action-icon">🏟️</span>
+          <span class="action-title">Escenarios</span>
+          <span class="action-desc">Reserva canchas y espacios.</span>
+        </a>
+        <a href="/profile" class="action-card">
+          <span class="action-icon">👤</span>
+          <span class="action-title">Mi Perfil</span>
+          <span class="action-desc">Actualiza tus datos y preferencias.</span>
+        </a>
+        <a href="/novedades" class="action-card">
+          <span class="action-icon">📝</span>
+          <span class="action-title">Reportar Novedad</span>
+          <span class="action-desc">Registra incidencias en escenarios.</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+</body>
+
+</html>
