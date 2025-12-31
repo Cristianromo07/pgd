@@ -22,7 +22,8 @@ export default function Layout({ user, setUser }) {
             {/* Sidebar / Navbar */}
             <aside className="bg-slate-800 text-white w-full md:w-64 p-4 flex flex-col">
                 <div className="text-2xl font-bold mb-8 flex items-center gap-2">
-                    Coldeporte <span>🏃‍♂️</span>
+                    Gestión Deportiva
+                    <span>🏃‍♂️</span>
                 </div>
 
                 <nav className="flex-1 space-y-2">
@@ -64,10 +65,10 @@ export default function Layout({ user, setUser }) {
                     </NavLink>
 
                     <NavLink
-                        to="/schedule"
+                        to="/subgerencia-escenarios/horario-gestor"
                         className={({ isActive }) => `block px-4 py-2 rounded transition-colors ${isActive ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700'}`}
                     >
-                        Mi Horario
+                        Horario Gestor
                     </NavLink>
 
                     <NavLink

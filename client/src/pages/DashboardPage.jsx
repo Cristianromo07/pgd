@@ -43,10 +43,10 @@ export default function DashboardPage({ user }) {
                 />
 
                 <DashboardCard
-                    to="/schedule"
+                    to="/subgerencia-escenarios/horario-gestor"
                     icon="📅"
-                    title="Mi Horario"
-                    desc="Visualiza tu horario semanal."
+                    title="Horario Gestor"
+                    desc="Gestiona horarios semanales."
                 />
 
                 <DashboardCard

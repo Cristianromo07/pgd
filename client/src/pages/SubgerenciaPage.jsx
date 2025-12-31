@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -8,6 +9,7 @@ import BookingModal from '../components/BookingModal';
 import ReportNewsForm from '../components/ReportNewsForm';
 
 export default function SubgerenciaPage({ user }) {
+    const navigate = useNavigate();
     const [scenarios, setScenarios] = useState([]);
     const [events, setEvents] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -93,15 +95,18 @@ export default function SubgerenciaPage({ user }) {
     const saveBooking = async (formData) => {
         try {
             if (formData.id) {
+                // Actualizar una sola instancia
                 await api.put(`/reservas/${formData.id}`, formData);
+                alert('Reserva actualizada');
             } else {
-                await api.post('/reservas', formData);
+                // Crear (posiblemente múltiples en el backend)
+                const res = await api.post('/reservas', formData);
+                alert(res.data.message || 'Reserva(s) creada(s) con éxito! 🎉');
             }
             setIsModalOpen(false);
             fetchEvents();
-            alert('Reserva guardada');
         } catch (err) {
-            alert(err.response?.data?.error || 'Error al guardar');
+            alert(err.response?.data?.error || 'Error al procesar la reserva');
         }
     };
 
@@ -118,7 +123,7 @@ export default function SubgerenciaPage({ user }) {
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-[85vh]">
+        <div className="subgerencia-page bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-[85vh]">
             {/* Header Interno */}
             <div className="bg-slate-700 text-white p-4 flex justify-between items-center">
                 <h2 className="text-lg font-bold">Subgerencia de Escenarios</h2>
@@ -138,6 +143,13 @@ export default function SubgerenciaPage({ user }) {
                     >
                         Reportar Novedad
                     </button>
+                    <button
+                        onClick={() => navigate('/subgerencia-escenarios/horario-gestor')}
+                        className={`px-3 py-1 rounded text-sm transition-colors ${activeTab === 'horario' ? 'bg-white text-slate-800' : 'text-gray-200 hover:bg-slate-500'
+                            }`}
+                    >
+                        Horario Gestor
+                    </button>
                 </div>
             </div>
 
@@ -156,7 +168,7 @@ export default function SubgerenciaPage({ user }) {
                             </select>
                         </div>
 
-                        <div className="h-[600px]">
+                        <div className="calendar-frame">
                             <FullCalendar
                                 ref={calendarRef}
                                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

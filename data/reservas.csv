@@ -1,0 +1,89 @@
+id,escenario_id,escenario_nombre,usuario_id,usuario_email,fecha,horario,color
+73,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Sun Dec 28 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 08:00:00",violeta
+20,17,"Cancha Arenilla Hortensia",3,"cristianromo07@gmail.com",Sun Dec 28 2025 00:00:00 GMT-0500 (Colombia Standard Time),"07:00:00 - 12:30:00",naranja
+39,13,"Cancha Intermunicipal",2,"admin@test.com",Sun Dec 28 2025 00:00:00 GMT-0500 (Colombia Standard Time),"12:00:00 - 18:00:00",amarillo
+94,23,"Canchas de Tenis de Campo",2,"admin@test.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 08:00:00",azul
+59,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 06:30:00",violeta
+44,1,"Cancha Santa Ana",2,"admin@test.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 07:00:00",azul
+42,13,"Cancha Intermunicipal",2,"admin@test.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 08:00:00",azul
+47,17,"Cancha Arenilla Hortensia",3,"cristianromo07@gmail.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 07:30:00",azul
+48,17,"Cancha Arenilla Hortensia",3,"cristianromo07@gmail.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 07:00:00",azul
+49,17,"Cancha Arenilla Hortensia",3,"cristianromo07@gmail.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 07:00:00",azul
+50,17,"Cancha Arenilla Hortensia",3,"cristianromo07@gmail.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 07:00:00",azul
+29,22,"Coliseo Ditaires",2,"admin@test.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 11:30:00",rojo
+51,17,"Cancha Arenilla Hortensia",3,"cristianromo07@gmail.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 07:30:00",azul
+18,17,"Cancha Arenilla Hortensia",3,"cristianromo07@gmail.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"07:00:00 - 09:00:00",rojo
+61,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"07:30:00 - 09:00:00",azul
+99,23,"Canchas de Tenis de Campo",2,"admin@test.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"08:00:00 - 11:00:00",azul
+64,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"09:00:00 - 10:00:00",naranja
+36,17,"Cancha Arenilla Hortensia",2,"admin@test.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"10:00:00 - 12:00:00",azul
+43,1,"Cancha Santa Ana",2,"admin@test.com",Mon Dec 29 2025 00:00:00 GMT-0500 (Colombia Standard Time),"20:00:00 - 22:00:00",rojo
+95,23,"Canchas de Tenis de Campo",2,"admin@test.com",Tue Dec 30 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 08:00:00",azul
+27,22,"Coliseo Ditaires",2,"admin@test.com",Tue Dec 30 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 11:30:00",azul
+38,9,"Cancha San José",2,"admin@test.com",Tue Dec 30 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 10:00:00",azul
+26,17,"Cancha Arenilla Hortensia",2,"admin@test.com",Tue Dec 30 2025 00:00:00 GMT-0500 (Colombia Standard Time),"07:00:00 - 10:30:00",naranja
+74,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Tue Dec 30 2025 00:00:00 GMT-0500 (Colombia Standard Time),"08:00:00 - 09:30:00",azul
+21,12,"Cancha Parque del Artista",3,"cristianromo07@gmail.com",Tue Dec 30 2025 00:00:00 GMT-0500 (Colombia Standard Time),"08:30:00 - 11:00:00",azul
+70,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Tue Dec 30 2025 00:00:00 GMT-0500 (Colombia Standard Time),"09:30:00 - 11:00:00",azul
+35,7,"Cancha Providencia",2,"admin@test.com",Tue Dec 30 2025 00:00:00 GMT-0500 (Colombia Standard Time),"16:00:00 - 14:30:00",azul
+125,18,"Skatepark",2,"admin@test.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 08:00:00",violeta
+76,17,"Cancha Arenilla Hortensia",3,"cristianromo07@gmail.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 06:30:00",azul
+60,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 06:30:00",violeta
+96,23,"Canchas de Tenis de Campo",2,"admin@test.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 08:00:00",azul
+46,2,"Cancha Samaria",3,"cristianromo07@gmail.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 08:00:00",azul
+31,3,"Placa Samaria",2,"admin@test.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 11:30:00",violeta
+62,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"07:30:00 - 09:00:00",azul
+17,17,"Cancha Arenilla Hortensia",3,"cristianromo07@gmail.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"07:30:00 - 11:00:00",azul
+37,4,"Cancha San Fernando",2,"admin@test.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"08:00:00 - 11:30:00",azul
+34,7,"Cancha Providencia",2,"admin@test.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"08:00:00 - 11:00:00",azul
+100,23,"Canchas de Tenis de Campo",2,"admin@test.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"08:00:00 - 11:00:00",azul
+65,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"09:00:00 - 10:00:00",naranja
+54,1,"Cancha Santa Ana",2,"admin@test.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"09:30:00 - 10:00:00",azul
+53,1,"Cancha Santa Ana",2,"admin@test.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"09:30:00 - 10:00:00",azul
+52,1,"Cancha Santa Ana",2,"admin@test.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"09:30:00 - 10:00:00",azul
+55,1,"Cancha Santa Ana",2,"admin@test.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"09:30:00 - 10:00:00",azul
+23,12,"Cancha Parque del Artista",3,"cristianromo07@gmail.com",Wed Dec 31 2025 00:00:00 GMT-0500 (Colombia Standard Time),"10:30:00 - 14:30:00",azul
+97,23,"Canchas de Tenis de Campo",2,"admin@test.com",Thu Jan 01 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 08:00:00",azul
+56,13,"Cancha Intermunicipal",3,"cristianromo07@gmail.com",Thu Jan 01 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 08:00:00",azul
+112,20,"Pista BMX",2,"admin@test.com",Thu Jan 01 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 08:30:00",azul
+19,17,"Cancha Arenilla Hortensia",3,"cristianromo07@gmail.com",Thu Jan 01 2026 00:00:00 GMT-0500 (Colombia Standard Time),"07:00:00 - 10:30:00",violeta
+32,3,"Placa Samaria",2,"admin@test.com",Thu Jan 01 2026 00:00:00 GMT-0500 (Colombia Standard Time),"07:30:00 - 11:00:00",azul
+28,22,"Coliseo Ditaires",2,"admin@test.com",Thu Jan 01 2026 00:00:00 GMT-0500 (Colombia Standard Time),"07:30:00 - 13:00:00",naranja
+71,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Thu Jan 01 2026 00:00:00 GMT-0500 (Colombia Standard Time),"09:30:00 - 11:00:00",azul
+22,12,"Cancha Parque del Artista",3,"cristianromo07@gmail.com",Thu Jan 01 2026 00:00:00 GMT-0500 (Colombia Standard Time),"10:00:00 - 13:30:00",azul
+98,23,"Canchas de Tenis de Campo",2,"admin@test.com",Fri Jan 02 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 08:00:00",azul
+45,17,"Cancha Arenilla Hortensia",2,"admin@test.com",Fri Jan 02 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 07:30:00",azul
+30,22,"Coliseo Ditaires",2,"admin@test.com",Fri Jan 02 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 13:30:00",violeta
+33,17,"Cancha Arenilla Hortensia",2,"admin@test.com",Fri Jan 02 2026 00:00:00 GMT-0500 (Colombia Standard Time),"07:30:00 - 09:30:00",azul
+63,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Fri Jan 02 2026 00:00:00 GMT-0500 (Colombia Standard Time),"07:30:00 - 09:00:00",azul
+66,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Fri Jan 02 2026 00:00:00 GMT-0500 (Colombia Standard Time),"09:00:00 - 10:00:00",naranja
+72,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Sat Jan 03 2026 00:00:00 GMT-0500 (Colombia Standard Time),"09:30:00 - 11:00:00",azul
+57,13,"Cancha Intermunicipal",3,"cristianromo07@gmail.com",Sun Jan 04 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 07:00:00",azul
+25,23,"Canchas de Tenis de Campo",3,"cristianromo07@gmail.com",Sun Jan 04 2026 00:00:00 GMT-0500 (Colombia Standard Time),"07:00:00 - 12:30:00",azul
+101,23,"Canchas de Tenis de Campo",2,"admin@test.com",Mon Jan 05 2026 00:00:00 GMT-0500 (Colombia Standard Time),"08:00:00 - 11:00:00",azul
+67,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Mon Jan 05 2026 00:00:00 GMT-0500 (Colombia Standard Time),"09:00:00 - 10:00:00",naranja
+24,23,"Canchas de Tenis de Campo",3,"cristianromo07@gmail.com",Tue Jan 06 2026 00:00:00 GMT-0500 (Colombia Standard Time),"11:30:00 - 07:00:00",azul
+126,18,"Skatepark",2,"admin@test.com",Wed Jan 07 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:00:00 - 08:00:00",violeta
+102,23,"Canchas de Tenis de Campo",2,"admin@test.com",Wed Jan 07 2026 00:00:00 GMT-0500 (Colombia Standard Time),"08:00:00 - 11:00:00",azul
+68,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Wed Jan 07 2026 00:00:00 GMT-0500 (Colombia Standard Time),"09:00:00 - 10:00:00",naranja
+69,8,"Cancha Yarumito",3,"cristianromo07@gmail.com",Fri Jan 09 2026 00:00:00 GMT-0500 (Colombia Standard Time),"09:00:00 - 10:00:00",naranja
+103,23,"Canchas de Tenis de Campo",2,"admin@test.com",Mon Jan 12 2026 00:00:00 GMT-0500 (Colombia Standard Time),"08:00:00 - 11:00:00",azul
+104,23,"Canchas de Tenis de Campo",2,"admin@test.com",Wed Jan 14 2026 00:00:00 GMT-0500 (Colombia Standard Time),"08:00:00 - 11:00:00",azul
+113,20,"Pista BMX",2,"admin@test.com",Thu Jan 15 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 08:30:00",azul
+105,23,"Canchas de Tenis de Campo",2,"admin@test.com",Mon Jan 19 2026 00:00:00 GMT-0500 (Colombia Standard Time),"08:00:00 - 11:00:00",azul
+106,23,"Canchas de Tenis de Campo",2,"admin@test.com",Wed Jan 21 2026 00:00:00 GMT-0500 (Colombia Standard Time),"08:00:00 - 11:00:00",azul
+107,23,"Canchas de Tenis de Campo",2,"admin@test.com",Mon Jan 26 2026 00:00:00 GMT-0500 (Colombia Standard Time),"08:00:00 - 11:00:00",azul
+108,23,"Canchas de Tenis de Campo",2,"admin@test.com",Wed Jan 28 2026 00:00:00 GMT-0500 (Colombia Standard Time),"08:00:00 - 11:00:00",azul
+114,20,"Pista BMX",2,"admin@test.com",Thu Jan 29 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 08:30:00",azul
+109,23,"Canchas de Tenis de Campo",2,"admin@test.com",Mon Feb 02 2026 00:00:00 GMT-0500 (Colombia Standard Time),"08:00:00 - 11:00:00",azul
+110,23,"Canchas de Tenis de Campo",2,"admin@test.com",Wed Feb 04 2026 00:00:00 GMT-0500 (Colombia Standard Time),"08:00:00 - 11:00:00",azul
+124,20,"Pista BMX",2,"admin@test.com",Mon Feb 09 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 08:00:00",azul
+115,20,"Pista BMX",2,"admin@test.com",Thu Feb 12 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 08:30:00",azul
+116,20,"Pista BMX",2,"admin@test.com",Thu Feb 26 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 08:30:00",azul
+117,20,"Pista BMX",2,"admin@test.com",Thu Mar 12 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 08:30:00",azul
+118,20,"Pista BMX",2,"admin@test.com",Thu Mar 26 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 08:30:00",azul
+119,20,"Pista BMX",2,"admin@test.com",Thu Apr 09 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 08:30:00",azul
+120,20,"Pista BMX",2,"admin@test.com",Thu Apr 23 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 08:30:00",azul
+121,20,"Pista BMX",2,"admin@test.com",Thu May 07 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 08:30:00",azul
+122,20,"Pista BMX",2,"admin@test.com",Thu May 21 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 08:30:00",azul
+123,20,"Pista BMX",2,"admin@test.com",Thu Jun 04 2026 00:00:00 GMT-0500 (Colombia Standard Time),"06:30:00 - 08:30:00",azul

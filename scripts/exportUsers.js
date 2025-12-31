@@ -1,5 +1,6 @@
 const mysql = require('mysql2/promise');
 const fs = require('fs');
+const path = require('path');
 
 async function exportUsers() {
   try {
@@ -26,10 +27,13 @@ async function exportUsers() {
     // 6️⃣ Combinar cabecera + filas
     const csv = [header, ...csvRows].join('\n');
 
-    // 7️⃣ Guardar en archivo
-    fs.writeFileSync('users.csv', csv);
+    // 7️⃣ Guardar en archivo (usar ruta absoluta relativa al repo)
+    const dataDir = path.join(__dirname, '..', 'data');
+    fs.mkdirSync(dataDir, { recursive: true });
+    const filename = path.join(dataDir, 'users.csv');
+    fs.writeFileSync(filename, csv);
 
-    console.log('✅ Exportación completada: users.csv');
+    console.log(`✅ Exportación completada: ${filename}`);
 
   } catch (err) {
     console.error('❌ Error al exportar:', err);

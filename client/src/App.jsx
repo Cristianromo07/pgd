@@ -8,7 +8,7 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import Layout from './pages/Layout';
 import SubgerenciaPage from './pages/SubgerenciaPage';
-import SchedulePage from './pages/SchedulePage';
+import HorarioGestor from './pages/HorarioGestor';
 import ProfilePage from './pages/ProfilePage';
 import { CulturaPage, FomentoPage, ActividadFisicaPage } from './pages/GenericPages';
 
@@ -40,17 +40,18 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Rutas Públicas */}
-        <Route path="/" element={!user ? <LoginPage setUser={setUser} /> : <Navigate to="/dashboard" />} />
+        <Route path="/" element={<LoginPage setUser={setUser} />} />
         <Route path="/register" element={!user ? <RegisterPage /> : <Navigate to="/dashboard" />} />
 
         {/* Rutas Protegidas (Layout) */}
         <Route element={user ? <Layout user={user} setUser={setUser} /> : <Navigate to="/" />}>
           <Route path="/dashboard" element={<DashboardPage user={user} />} />
           <Route path="/subgerencia-escenarios" element={<SubgerenciaPage user={user} />} />
+          <Route path="/subgerencia-escenarios/horario-gestor" element={<HorarioGestor user={user} />} />
           <Route path="/cultura" element={<CulturaPage />} />
           <Route path="/fomento-deportivo" element={<FomentoPage />} />
           <Route path="/actividad-fisica" element={<ActividadFisicaPage />} />
-          <Route path="/schedule" element={<SchedulePage />} />
+          
           <Route path="/profile" element={<ProfilePage user={user} />} />
         </Route>
 

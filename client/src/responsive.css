@@ -1,0 +1,153 @@
+/* responsive.css - Tipografía fluida, calendario adaptable y espaciado */
+:root{
+  --max-content-width: 1200px;
+  --bg: #fff;
+  --text: #111;
+  --gap: clamp(8px, 1.6vw, 18px);
+  --container-padding: clamp(12px, 3vw, 24px);
+}
+
+/* Tipografía fluida: escala entre móvil y escritorio */
+html{
+  box-sizing: border-box;
+  font-size: clamp(14px, 2.2vw, 18px);
+  -webkit-text-size-adjust: 100%;
+}
+*,*::before,*::after{box-sizing:inherit;}
+body{
+  margin:0;
+  color:var(--text);
+  background:var(--bg);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  line-height:1.45;
+  padding: var(--container-padding);
+}
+
+.site-container{
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  width: 100%;
+}
+
+.stack > * + * { margin-top: var(--gap); }
+
+input, select, textarea, button {
+  font-size: 0.95rem;
+  padding: clamp(8px, 1.6vw, 12px);
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.calendar-wrapper{
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 auto;
+  padding-bottom: 4px;
+}
+
+.calendar{
+  width: 100%;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--gap);
+  align-items: start;
+}
+
+.calendar table{
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.calendar th, .calendar td{
+  padding: clamp(6px, 1.2vw, 10px);
+  border: 1px solid #eee;
+  vertical-align: top;
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calendar .day-cell { 
+  min-height: 72px;
+  max-height: 180px;
+  overflow: hidden;
+}
+
+.event {
+  display:block;
+  background: #f5f7ff;
+  margin-bottom: 6px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 0.9em;
+  line-height:1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 900px){
+  :root { --max-content-width: 1000px; }
+  .calendar { gap: calc(var(--gap) * 0.75); }
+  .event { font-size: 0.88em; padding: 6px; }
+}
+
+@media (max-width: 600px){
+  html{ font-size: 14px; }
+  body{ padding: 12px; }
+  .calendar{
+    grid-template-columns: repeat(7, minmax(100px, 1fr));
+    gap: 10px;
+  }
+  .calendar .day-cell { min-height: 60px; max-height: 140px; }
+  input, button, select, textarea { padding: 10px; }
+}
+
+@media (min-width: 601px) and (max-width: 1024px){
+  :root { --max-content-width: 1100px; }
+  .calendar { gap: clamp(10px, 1.6vw, 14px); }
+}
+
+.row { display:flex; gap:var(--gap); flex-wrap:wrap; }
+.col { flex:1 1 0; min-width: 0; }
+.center { display:flex; align-items:center; justify-content:center; }
+
+img, iframe, embed, video { max-width:100%; height:auto; display:block; }
+
+.responsive-table { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
+/* Specific adjustments for Subgerencia page and FullCalendar */
+.subgerencia-page { font-size: 1rem; }
+.subgerencia-page h2 { font-size: clamp(1rem, 2.2vw, 1.25rem); }
+.subgerencia-page .calendar-frame { height: 600px; }
+
+/* Reduce FullCalendar font sizes and paddings for mobile */
+.subgerencia-page .fc { font-size: 0.95rem; }
+.subgerencia-page .fc .fc-button, .subgerencia-page .fc .fc-toolbar-title { font-size: 0.95rem; }
+
+@media (max-width: 900px){
+  .subgerencia-page { font-size: 0.95rem; }
+  .subgerencia-page .calendar-frame { height: 480px; }
+  .subgerencia-page h2 { font-size: clamp(0.95rem, 2.4vw, 1.15rem); }
+}
+
+@media (max-width: 600px){
+  /* Mobile: reduce general text and tighten paddings */
+  .subgerencia-page { font-size: 0.9rem; }
+  .subgerencia-page h2 { font-size: 1rem; }
+  .subgerencia-page .calendar-frame { height: 420px; }
+
+  /* FullCalendar tweaks */
+  .subgerencia-page .fc { font-size: 0.88rem; }
+  .subgerencia-page .fc .fc-button { padding: 6px 8px; }
+  .subgerencia-page .fc .fc-toolbar-chunk { gap: 6px; }
+
+  /* Reduce spacing in header controls and tabs */
+  .subgerencia-page .flex.items-center.gap-2,
+  .subgerencia-page .flex.bg-slate-600 { gap: 6px; }
+  .subgerencia-page .text-lg { font-size: 1rem; }
+}

@@ -1,6 +1,6 @@
-# Plataforma de Gestión Deportiva 🏟️🏃‍♂️
+# Plataforma de Gestión Deportiva
 
-Una solución web integral diseñada para la administración y promoción de actividades deportivas, escenarios y bienestar para los usuarios. Este sistema permite a los usuarios registrarse, explorar ofertas deportivas, consultar horarios y mantenerse informados sobre las últimas novedades del mundo deportivo.
+Proyecto web para la administración de escenarios deportivos, reservas y novedades. Permite a los usuarios registrarse, gestionar reservas y a los administradores administrar escenarios y reportes.
 
 ## 🚀 Características Principales
 
@@ -12,76 +12,110 @@ Una solución web integral diseñada para la administración y promoción de act
 - **Perfil de Usuario**: Gestión de información personal del usuario.
 - **Diseño Responsivo**: Interfaz moderna adaptable a diferentes dispositivos, estilizada con CSS funcional y dinámico.
 
-## 🛠️ Tecnologías Utilizadas
+## Tecnologías
 
-Este proyecto utiliza un stack tecnológico robusto y moderno:
+## Requisitos
 
-*   **Backend**: [Node.js](https://nodejs.org/) con [Express.js](https://expressjs.com/).
-*   **Base de Datos**: [MySQL](https://www.mysql.com/) (conectado mediante `mysql2`).
-*   **Seguridad**: `bcrypt` para hashing de contraseñas y `express-session` para manejo de sesiones.
-*   **Frontend**: HTML5, CSS3 y JavaScript (Vanilla) para una experiencia de usuario fluida.
+- Node.js v14+ (recomendado v16+)
+- MySQL Server
+- npm (o yarn)
 
-## 📋 Requisitos Previos
+Nota: los archivos de datos y backups se han movido a la carpeta `data/`. Los scripts útiles para exportar están en `scripts/`.
 
-Asegúrate de tener instalado lo siguiente en tu sistema:
+## Configuración y ejecución (desarrollo)
 
-*   [Node.js](https://nodejs.org/) (v14 o superior)
-*   [MySQL Server](https://dev.mysql.com/downloads/mysql/)
+1. Clona el repositorio y sitúate en la raíz del proyecto:
 
-## ⚙️ Instalación y Configuración
+```bash
+git clone <URL_DEL_REPOSITORIO>
+cd plataforma-gestion-deportiva
+```
 
-Sigue estos pasos para poner en marcha el proyecto localmente:
+2. Instala dependencias del servidor:
 
-1.  **Clonar el repositorio** (o descargar los archivos):
-    ```bash
-    git clone <url-del-repositorio>
-    cd login-backend
-    ```
+```bash
+npm install
+```
 
-2.  **Instalar dependencias**:
-    Ejecuta el siguiente comando para instalar las librerías necesarias listadas en `package.json`:
-    ```bash
-    npm install
-    ```
+3. Configura la base de datos MySQL y crea la base `login_db`. Puedes importar el esquema/seed reducido incluido en `data/setup_reservas.sql`, o el backup completo si lo tienes:
 
-3.  **Configurar Base de Datos**:
-    *   Crea una base de datos en MySQL llamada `login_db`.
-    *   Importa el archivo `login_db_backup.sql` incluido en el proyecto para crear la tabla de usuarios y datos iniciales:
-        ```bash
-        mysql -u tu_usuario -p login_db < login_db_backup.sql
-        ```
-    *   *(Opcional)* Si prefieres hacerlo manualmente, asegúrate de tener una tabla `users` con columnas `id`, `email`, y `password`.
+```bash
+# crea la base (si no existe)
+mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS login_db;"
+# importa esquema y datos de ejemplo
+mysql -u tu_usuario -p login_db < data/setup_reservas.sql
+# (si tienes el backup completo) mysql -u tu_usuario -p login_db < data/login_db_backup.sql
+```
 
-4.  **Configurar Credenciales**:
-    Abre el archivo `server.js` y actualiza el objeto `dbConfig` con tus credenciales locales de MySQL:
-    ```javascript
-    const dbConfig = {
-      host: 'localhost',
-      user: 'tu_usuario_mysql', // Ej: 'root'
-      password: 'tu_contraseña',
-      database: 'login_db'
-    };
-    ```
+4. Ajusta credenciales de la base de datos si es necesario en `server/index.js` (objeto `dbConfig`).
 
-5.  **Ejecutar el Servidor**:
-    Inicia la aplicación con:
-    ```bash
-    node server.js
-    ```
-    Verás un mensaje indicando que el servidor está escuchando en el puerto 3000.
+5. (Opcional) Ejecuta el frontend en modo desarrollo (puerta por defecto `5173`):
 
-6.  **Acceder a la Aplicación**:
-    Abre tu navegador y ve a:
-    `http://localhost:3000`
+```bash
+cd client
+npm install
+npm run dev
+```
 
-## 📂 Estructura del Proyecto
+6. Ejecuta el servidor (desde la raíz del proyecto):
 
-*   `server.js`: Punto de entrada del servidor, configuración de rutas y lógica de backend.
-*   `public/`: Archivos estáticos como `style.css` y scripts del lado del cliente.
-*   `*.html`: Vistas de la aplicación (Login, Registro, Dashboard, Perfil, etc.).
-*   `login_db_backup.sql`: Script SQL para inicializar la base de datos.
+```bash
+node server/index.js
+```
 
-## 🤝 Contribución
+El servidor sirve el frontend estático compilado desde `client/dist`. Para producción, ejecuta `npm run build` dentro de `client` y luego inicia el servidor.
+
+## Credenciales por defecto
+
+Al iniciar, el servidor crea o actualiza un usuario administrador por defecto:
+
+- Email: `admin@test.com`
+- Password: `admin123`
+
+## Endpoints relevantes (resumen)
+
+- `POST /api/login` — Iniciar sesión (body: `{ email, password }`).
+- `GET /api/user-info` — Información de sesión actual.
+- `GET /api/escenarios` — Lista de escenarios (requiere sesión).
+- `GET /api/reservas` — Obtener reservas (acepta `escenario_id` como query param).
+- `POST /api/reservas` — Crear reservas.
+- `PUT /api/reservas/:id` — Actualizar reserva.
+- `DELETE /api/reservas/:id` — Eliminar reserva.
+
+## Pruebas rápidas con curl
+
+```bash
+# Login y almacenar cookies
+curl -c cookies.txt -X POST http://localhost:3000/api/login -H "Content-Type: application/json" -d '{"email":"admin@test.com","password":"admin123"}'
+# Usar cookies para solicitar escenarios
+curl -b cookies.txt http://localhost:3000/api/escenarios
+```
+
+## Despliegue
+
+- Construye el frontend en `client` con `npm run build` y sirve `client/dist` con el servidor Express (ya configurado para servir estáticos).
+- Considera usar HTTPS y configurar `cookie.secure = true` en producción.
+- Configura variables de entorno para credenciales y secretos (reemplazar el `secret` en `server/index.js`).
+
+## Troubleshooting
+
+- Error de conexión a MySQL: verifica `dbConfig` en `server/index.js` y que MySQL acepte conexiones desde `localhost`.
+- Rutas 404 en producción: asegúrate de haber compilado el frontend (`client/dist`) antes de iniciar el servidor.
+- Problemas de sesiones: revisa `withCredentials` en llamadas desde el frontend y que el dominio/puerto coincidan.
+
+## Contribuciones
+
+Abre issues para bugs o mejoras y envía pull requests con descripciones claras. Mantén consistencia en estilo y linter (`npm run lint` desde `client`).
+
+---
+
+Si quieres, puedo:
+
+- Añadir badges de CI/coverage.
+- Crear un archivo `.env.example` y leer variables desde `process.env`.
+- Preparar un script de inicio (`npm run start`) y un `Procfile` para despliegue.
+
+
 
 Si deseas contribuir a mejorar, ¡eres bienvenido! Por favor, abre un issue o envía un pull request.
 
