@@ -18,6 +18,9 @@ export default function BookingModal({ isOpen, onClose, onSave, onDelete, initia
         hora_inicio: '',
         hora_fin: '',
         color: 'azul',
+        nombre_solicitante: '',
+        telefono_solicitante: '',
+        descripcion_actividad: '',
         // Recurrencia
         repite: 'nunca',
         intervalo: 1,
@@ -38,6 +41,9 @@ export default function BookingModal({ isOpen, onClose, onSave, onDelete, initia
                 hora_inicio: initialData.hora_inicio || '',
                 hora_fin: initialData.hora_fin || '',
                 color: initialData.color || 'azul',
+                nombre_solicitante: initialData.nombre_solicitante || '',
+                telefono_solicitante: initialData.telefono_solicitante || '',
+                descripcion_actividad: initialData.descripcion_actividad || '',
                 repite: 'nunca',
                 intervalo: 1,
                 dias_semana: [],
@@ -96,6 +102,46 @@ export default function BookingModal({ isOpen, onClose, onSave, onDelete, initia
                                 <option key={sc.id} value={sc.id}>{sc.nombre}</option>
                             ))}
                         </select>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Nombre Solicitante</label>
+                            <input
+                                type="text"
+                                name="nombre_solicitante"
+                                value={formData.nombre_solicitante}
+                                onChange={handleChange}
+                                placeholder="Nombre completo"
+                                className="w-full rounded-lg border-gray-300 border p-2.5 outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Teléfono</label>
+                            <input
+                                type="tel"
+                                name="telefono_solicitante"
+                                value={formData.telefono_solicitante}
+                                onChange={handleChange}
+                                placeholder="Ej: 3001234567"
+                                className="w-full rounded-lg border-gray-300 border p-2.5 outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Descripción de la Actividad</label>
+                        <textarea
+                            name="descripcion_actividad"
+                            value={formData.descripcion_actividad}
+                            onChange={handleChange}
+                            placeholder="Ej: Clase de aeróbicos, Entrenamiento fútbol, etc."
+                            rows="2"
+                            className="w-full rounded-lg border-gray-300 border p-2.5 outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                        ></textarea>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

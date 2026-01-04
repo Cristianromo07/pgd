@@ -10,6 +10,8 @@ import Layout from './pages/Layout';
 import SubgerenciaPage from './pages/SubgerenciaPage';
 import HorarioGestor from './pages/HorarioGestor';
 import ProfilePage from './pages/ProfilePage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import { CulturaPage, FomentoPage, ActividadFisicaPage } from './pages/GenericPages';
 
 function App() {
@@ -40,8 +42,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Rutas Públicas */}
-        <Route path="/" element={<LoginPage setUser={setUser} />} />
+        <Route path="/" element={!user ? <LoginPage setUser={setUser} /> : <Navigate to="/dashboard" />} />
         <Route path="/register" element={!user ? <RegisterPage /> : <Navigate to="/dashboard" />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         {/* Rutas Protegidas (Layout) */}
         <Route element={user ? <Layout user={user} setUser={setUser} /> : <Navigate to="/" />}>
@@ -51,7 +55,7 @@ function App() {
           <Route path="/cultura" element={<CulturaPage />} />
           <Route path="/fomento-deportivo" element={<FomentoPage />} />
           <Route path="/actividad-fisica" element={<ActividadFisicaPage />} />
-          
+
           <Route path="/profile" element={<ProfilePage user={user} />} />
         </Route>
 

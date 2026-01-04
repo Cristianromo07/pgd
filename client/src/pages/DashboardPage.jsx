@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Palette, Trophy, Heart, Map, Clock, User } from 'lucide-react';
 
 export default function DashboardPage({ user }) {
     return (
@@ -15,19 +16,19 @@ export default function DashboardPage({ user }) {
                     <>
                         <DashboardCard
                             to="/cultura"
-                            icon="C"
+                            icon={<Palette className="h-10 w-10 text-purple-500" />}
                             title="Cultura"
                             desc="Gestión cultural y artística."
                         />
                         <DashboardCard
                             to="/fomento-deportivo"
-                            icon="T"
+                            icon={<Trophy className="h-10 w-10 text-yellow-500" />}
                             title="Fomento Deportivo"
                             desc="Programas de apoyo al deporte."
                         />
                         <DashboardCard
                             to="/actividad-fisica"
-                            icon="A"
+                            icon={<Heart className="h-10 w-10 text-red-500" />}
                             title="Actividad Física"
                             desc="Promoción de hábitos saludables."
                         />
@@ -37,21 +38,21 @@ export default function DashboardPage({ user }) {
                 {/* Rutas Comunes */}
                 <DashboardCard
                     to="/subgerencia-escenarios"
-                    icon="E"
+                    icon={<Map className="h-10 w-10 text-green-500" />}
                     title="Subgerencia Escenarios"
                     desc="Gestión y reporte de novedades."
                 />
 
                 <DashboardCard
                     to="/subgerencia-escenarios/horario-gestor"
-                    icon="H"
+                    icon={<Clock className="h-10 w-10 text-blue-500" />}
                     title="Horario Gestor"
                     desc="Gestiona horarios semanales."
                 />
 
                 <DashboardCard
                     to="/profile"
-                    icon="P"
+                    icon={<User className="h-10 w-10 text-slate-500" />}
                     title="Mi Perfil"
                     desc="Actualiza tus datos y preferencias."
                 />
@@ -62,10 +63,12 @@ export default function DashboardPage({ user }) {
 
 function DashboardCard({ to, icon, title, desc }) {
     return (
-        <Link to={to} className="block p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md hover:bg-slate-50 transition-all text-center group">
-            <span className="text-4xl mb-4 block group-hover:scale-110 transition-transform">{icon}</span>
-            <h3 className="text-xl font-semibold text-slate-800 mb-2">{title}</h3>
-            <p className="text-gray-600 text-sm">{desc}</p>
+        <Link to={to} className="block p-6 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md hover:border-blue-200 hover:bg-blue-50/30 transition-all text-center group">
+            <div className="flex justify-center mb-4 group-hover:scale-110 transition-transform">
+                {icon}
+            </div>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">{title}</h3>
+            <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
         </Link>
     );
 }

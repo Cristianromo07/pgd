@@ -45,7 +45,7 @@ export default function SubgerenciaPage({ user }) {
 
             const mappedEvents = res.data.map(r => ({
                 id: r.id,
-                title: `${r.usuario_email} (${r.escenario_nombre})`,
+                title: `${r.descripcion_actividad || 'Sin descripción'} - ${r.nombre_solicitante || r.usuario_email}`,
                 start: `${r.fecha.split('T')[0]}T${r.hora_inicio}`,
                 end: `${r.fecha.split('T')[0]}T${r.hora_fin}`,
                 backgroundColor: getColorHex(r.color),
@@ -87,7 +87,10 @@ export default function SubgerenciaPage({ user }) {
             fecha: props.fecha.split('T')[0],
             hora_inicio: props.hora_inicio,
             hora_fin: props.hora_fin,
-            color: props.color
+            color: props.color,
+            nombre_solicitante: props.nombre_solicitante,
+            telefono_solicitante: props.telefono_solicitante,
+            descripcion_actividad: props.descripcion_actividad
         });
         setIsModalOpen(true);
     };

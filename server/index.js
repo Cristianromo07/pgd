@@ -5,6 +5,7 @@ const session = require('express-session');
 const bcrypt = require('bcrypt');
 const mysql = require('mysql2/promise');
 const cors = require('cors');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -44,6 +45,37 @@ async function initDb() {
     pool = mysql.createPool(dbConfig);
     const conn = await pool.getConnection();
     await conn.ping();
+
+    // Migración: Asegurar que existan las columnas de reset_token
+    const [columns] = await conn.query('SHOW COLUMNS FROM users');
+    const columnNames = columns.map(c => c.Field);
+
+    if (!columnNames.includes('reset_token')) {
+      await conn.query('ALTER TABLE users ADD COLUMN reset_token VARCHAR(255) NULL');
+      console.log('Columna reset_token añadida a users');
+    }
+    if (!columnNames.includes('reset_token_expires')) {
+      await conn.query('ALTER TABLE users ADD COLUMN reset_token_expires DATETIME NULL');
+      console.log('Columna reset_token_expires añadida a users');
+    }
+
+    // Migración para reservas: nombre, telefono, descripcion
+    const [reservaCols] = await conn.query('SHOW COLUMNS FROM reservas');
+    const reservaColNames = reservaCols.map(c => c.Field);
+
+    if (!reservaColNames.includes('nombre_solicitante')) {
+      await conn.query('ALTER TABLE reservas ADD COLUMN nombre_solicitante VARCHAR(255) NULL');
+      console.log('Columna nombre_solicitante añadida a reservas');
+    }
+    if (!reservaColNames.includes('telefono_solicitante')) {
+      await conn.query('ALTER TABLE reservas ADD COLUMN telefono_solicitante VARCHAR(255) NULL');
+      console.log('Columna telefono_solicitante añadida a reservas');
+    }
+    if (!reservaColNames.includes('descripcion_actividad')) {
+      await conn.query('ALTER TABLE reservas ADD COLUMN descripcion_actividad TEXT NULL');
+      console.log('Columna descripcion_actividad añadida a reservas');
+    }
+
     conn.release();
     console.log('Conectado a la base de datos');
   } catch (e) {
@@ -133,7 +165,11 @@ function generateDates(data) {
 
 // Crear reserva (requiere autenticación)
 app.post('/api/reservas', isAuthenticated, async (req, res) => {
-  const { escenario_id, fecha, hora_inicio, hora_fin, color, repite, intervalo, dias_semana, fin_tipo, fin_fecha, fin_repeticiones } = req.body;
+  const {
+    escenario_id, fecha, hora_inicio, hora_fin, color,
+    repite, intervalo, dias_semana, fin_tipo, fin_fecha, fin_repeticiones,
+    nombre_solicitante, telefono_solicitante, descripcion_actividad
+  } = req.body;
   const usuario_id = req.session.userId;
 
   if (!escenario_id || !fecha || !hora_inicio || !hora_fin || !color) {
@@ -160,9 +196,15 @@ app.post('/api/reservas', isAuthenticated, async (req, res) => {
       }
 
       await connection.query(`
-        INSERT INTO reservas (escenario_id, usuario_id, fecha, hora_inicio, hora_fin, color)
-        VALUES (?, ?, ?, ?, ?, ?)
-      `, [escenario_id, usuario_id, d, hora_inicio, hora_fin, color]);
+        INSERT INTO reservas (
+          escenario_id, usuario_id, fecha, hora_inicio, hora_fin, color, 
+          nombre_solicitante, telefono_solicitante, descripcion_actividad
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        escenario_id, usuario_id, d, hora_inicio, hora_fin, color,
+        nombre_solicitante, telefono_solicitante, descripcion_actividad
+      ]);
     }
 
     await connection.commit();
@@ -180,7 +222,10 @@ app.post('/api/reservas', isAuthenticated, async (req, res) => {
 // Actualizar reserva
 app.put('/api/reservas/:id', isAuthenticated, async (req, res) => {
   const reservaId = req.params.id;
-  const { escenario_id, fecha, hora_inicio, hora_fin, color } = req.body;
+  const {
+    escenario_id, fecha, hora_inicio, hora_fin, color,
+    nombre_solicitante, telefono_solicitante, descripcion_actividad
+  } = req.body;
   const userId = req.session.userId;
   const userRole = req.session.role;
 
@@ -201,8 +246,15 @@ app.put('/api/reservas/:id', isAuthenticated, async (req, res) => {
     if (overlaps.length > 0) return res.status(409).json({ error: 'Solapamiento con otra reserva' });
 
     await pool.query(`
-      UPDATE reservas SET escenario_id=?, fecha=?, hora_inicio=?, hora_fin=?, color=? WHERE id=?
-    `, [escenario_id, fecha, hora_inicio, hora_fin, color, reservaId]);
+      UPDATE reservas 
+      SET escenario_id=?, fecha=?, hora_inicio=?, hora_fin=?, color=?, 
+          nombre_solicitante=?, telefono_solicitante=?, descripcion_actividad=? 
+      WHERE id=?
+    `, [
+      escenario_id, fecha, hora_inicio, hora_fin, color,
+      nombre_solicitante, telefono_solicitante, descripcion_actividad,
+      reservaId
+    ]);
 
     res.json({ success: true, message: 'Reserva actualizada' });
 
@@ -284,6 +336,70 @@ app.post('/api/register', async (req, res) => {
     await pool.query('INSERT INTO users (email, password) VALUES (?, ?)', [email, hashedPassword]);
 
     res.json({ success: true, message: 'Usuario registrado' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error de servidor' });
+  }
+});
+
+// Olvidé mi contraseña (Generar token)
+app.post('/api/forgot-password', async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ error: 'El email es obligatorio' });
+
+  try {
+    const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+    if (!rows.length) {
+      // Por seguridad, no revelamos si el email existe o no
+      return res.json({ success: true, message: 'Si el correo existe, se enviará un enlace de recuperación' });
+    }
+
+    const token = crypto.randomBytes(20).toString('hex');
+    const expires = new Date(Date.now() + 3600000); // 1 hora
+
+    await pool.query(
+      'UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE email = ?',
+      [token, expires, email]
+    );
+
+    // Simular el envío del correo imprimiendo en consola
+    const resetUrl = `http://localhost:5173/reset-password?token=${token}`;
+    console.log('------------------------------------------');
+    console.log(`LINK DE RECUPERACIÓN PARA ${email}:`);
+    console.log(resetUrl);
+    console.log('------------------------------------------');
+
+    res.json({ success: true, message: 'Si el correo existe, se enviará un enlace de recuperación' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error de servidor' });
+  }
+});
+
+// Restablecer contraseña (Usar token)
+app.post('/api/reset-password', async (req, res) => {
+  const { token, newPassword } = req.body;
+  if (!token || !newPassword) return res.status(400).json({ error: 'Token y nueva contraseña son obligatorios' });
+
+  try {
+    const [rows] = await pool.query(
+      'SELECT * FROM users WHERE reset_token = ? AND reset_token_expires > ?',
+      [token, new Date()]
+    );
+
+    if (!rows.length) {
+      return res.status(400).json({ error: 'El token es inválido o ha expirado' });
+    }
+
+    const user = rows[0];
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await pool.query(
+      'UPDATE users SET password = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?',
+      [hashedPassword, user.id]
+    );
+
+    res.json({ success: true, message: 'Contraseña actualizada correctamente' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error de servidor' });
