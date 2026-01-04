@@ -101,7 +101,7 @@ export default function SubgerenciaPage({ user }) {
             } else {
                 // Crear (posiblemente múltiples en el backend)
                 const res = await api.post('/reservas', formData);
-                alert(res.data.message || 'Reserva(s) creada(s) con éxito! 🎉');
+                alert(res.data.message || 'Reserva(s) creada(s) con éxito!');
             }
             setIsModalOpen(false);
             fetchEvents();

@@ -45,9 +45,9 @@ async function initDb() {
     const conn = await pool.getConnection();
     await conn.ping();
     conn.release();
-    console.log('✔ Conectado a la base de datos');
+    console.log('Conectado a la base de datos');
   } catch (e) {
-    console.error('\u274C Error conectando a la base de datos:', e.message);
+    console.error('Error conectando a la base de datos:', e.message);
     console.error('Verifica las variables de entorno DB_HOST/DB_USER/DB_PASSWORD/DB_NAME o que MySQL esté levantado');
     process.exit(1);
   }
@@ -254,11 +254,11 @@ app.post('/api/login', async (req, res) => {
 
   try {
     const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
-    if (!rows.length) return res.status(401).json({ error: 'Email o contraseña incorrectos ❌' });
+    if (!rows.length) return res.status(401).json({ error: 'Email o contraseña incorrectos' });
 
     const user = rows[0];
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(401).json({ error: 'Email o contraseña incorrectos ❌' });
+    if (!match) return res.status(401).json({ error: 'Email o contraseña incorrectos' });
 
     req.session.loggedIn = true;
     req.session.userId = user.id;
@@ -278,7 +278,7 @@ app.post('/api/register', async (req, res) => {
 
   try {
     const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
-    if (rows.length > 0) return res.status(400).json({ error: 'El usuario ya existe ❌' });
+    if (rows.length > 0) return res.status(400).json({ error: 'El usuario ya existe' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
     await pool.query('INSERT INTO users (email, password) VALUES (?, ?)', [email, hashedPassword]);

@@ -23,7 +23,6 @@ export default function Layout({ user, setUser }) {
             <aside className="bg-slate-800 text-white w-full md:w-64 p-4 flex flex-col">
                 <div className="text-2xl font-bold mb-8 flex items-center gap-2">
                     Gestión Deportiva
-                    <span>🏃‍♂️</span>
                 </div>
 
                 <nav className="flex-1 space-y-2">

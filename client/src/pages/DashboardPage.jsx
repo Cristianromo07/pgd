@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export default function DashboardPage({ user }) {
     return (
         <div className="bg-white rounded-lg shadow p-6">
-            <h1 className="text-3xl font-bold mb-2">Bienvenido 👋</h1>
+            <h1 className="text-3xl font-bold mb-2">Bienvenido</h1>
             <p className="text-gray-600 mb-6">
                 Has iniciado sesión correctamente. Selecciona el área de tu interés o gestión.
             </p>
@@ -15,19 +15,19 @@ export default function DashboardPage({ user }) {
                     <>
                         <DashboardCard
                             to="/cultura"
-                            icon="🎭"
+                            icon="C"
                             title="Cultura"
                             desc="Gestión cultural y artística."
                         />
                         <DashboardCard
                             to="/fomento-deportivo"
-                            icon="🏆"
+                            icon="T"
                             title="Fomento Deportivo"
                             desc="Programas de apoyo al deporte."
                         />
                         <DashboardCard
                             to="/actividad-fisica"
-                            icon="🏃‍♀️"
+                            icon="A"
                             title="Actividad Física"
                             desc="Promoción de hábitos saludables."
                         />
@@ -37,21 +37,21 @@ export default function DashboardPage({ user }) {
                 {/* Rutas Comunes */}
                 <DashboardCard
                     to="/subgerencia-escenarios"
-                    icon="🏟️"
+                    icon="E"
                     title="Subgerencia Escenarios"
                     desc="Gestión y reporte de novedades."
                 />
 
                 <DashboardCard
                     to="/subgerencia-escenarios/horario-gestor"
-                    icon="📅"
+                    icon="H"
                     title="Horario Gestor"
                     desc="Gestiona horarios semanales."
                 />
 
                 <DashboardCard
                     to="/profile"
-                    icon="👤"
+                    icon="P"
                     title="Mi Perfil"
                     desc="Actualiza tus datos y preferencias."
                 />

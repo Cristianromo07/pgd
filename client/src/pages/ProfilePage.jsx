@@ -6,7 +6,7 @@ export default function ProfilePage({ user }) {
 
     return (
         <div className="bg-white rounded-lg shadow p-6 max-w-2xl mx-auto">
-            <h1 className="text-2xl font-bold mb-6">Mi Perfil 👤</h1>
+            <h1 className="text-2xl font-bold mb-6">Mi Perfil</h1>
 
             <div className="space-y-4">
                 <div>
@@ -49,7 +49,7 @@ export default function ProfilePage({ user }) {
                     to="/subgerencia-escenarios/horario-gestor"
                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
                 >
-                    📅 Ver Horario Gestor
+                    Ver Horario Gestor
                 </Link>
             </div>
         </div>

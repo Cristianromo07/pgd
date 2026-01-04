@@ -22,7 +22,7 @@ export default function ReportNewsForm({ scenarios }) {
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto mt-6">
-            <h2 className="text-2xl font-bold mb-2 text-gray-800">Reportar Novedad 📝</h2>
+            <h2 className="text-2xl font-bold mb-2 text-gray-800">Reportar Novedad</h2>
             <p className="text-gray-600 mb-6">Gestión y reporte de novedades en los escenarios deportivos.</p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
