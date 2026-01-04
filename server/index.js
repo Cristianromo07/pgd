@@ -76,6 +76,74 @@ async function initDb() {
       console.log('Columna descripcion_actividad añadida a reservas');
     }
 
+    // Tabla para persistencia de horarios de personal
+    await conn.query(`
+      CREATE TABLE IF NOT EXISTS personal_horarios (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        escenario VARCHAR(255) NOT NULL,
+        gestor_nombre VARCHAR(255) NOT NULL,
+        contacto VARCHAR(255) DEFAULT '',
+        lunes VARCHAR(255),
+        martes VARCHAR(255),
+        miercoles VARCHAR(255),
+        jueves VARCHAR(255),
+        viernes VARCHAR(255),
+        sabado VARCHAR(255),
+        domingo VARCHAR(255),
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        UNIQUE KEY unique_gestor_escenario (escenario, gestor_nombre)
+      )
+    `);
+
+    // Migración para añadir contacto si la tabla ya existía
+    const [horarioCols] = await conn.query('SHOW COLUMNS FROM personal_horarios');
+    if (!horarioCols.map(c => c.Field).includes('contacto')) {
+      await conn.query('ALTER TABLE personal_horarios ADD COLUMN contacto VARCHAR(255) DEFAULT "" AFTER gestor_nombre');
+      console.log('Columna contacto añadida a personal_horarios');
+    }
+    // Sembrado inicial si la tabla está vacía
+    const [countRows] = await conn.query('SELECT COUNT(*) as cnt FROM personal_horarios');
+    if (countRows[0].cnt === 0) {
+      console.log('Sembrando tabla personal_horarios desde JSON...');
+      try {
+        const fs = require('fs');
+        const jsonPath = path.join(__dirname, '..', 'client/src/data/horarioGestoresFull.json');
+        if (fs.existsSync(jsonPath)) {
+          const raw = fs.readFileSync(jsonPath, 'utf8');
+          const jsonData = JSON.parse(raw);
+          const insertSql = `
+            INSERT INTO personal_horarios 
+            (escenario, gestor_nombre, contacto, lunes, martes, miercoles, jueves, viernes, sabado, domingo)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE
+            contacto = VALUES(contacto),
+            lunes = VALUES(lunes),
+            martes = VALUES(martes),
+            miercoles = VALUES(miercoles),
+            jueves = VALUES(jueves),
+            viernes = VALUES(viernes),
+            sabado = VALUES(sabado),
+            domingo = VALUES(domingo)
+          `;
+
+          for (const esc of jsonData) {
+            if (esc.gestores) {
+              for (const g of esc.gestores) {
+                if (g.nombre === 'CONTACTO') continue;
+                await conn.query(insertSql, [
+                  esc.escenario, g.nombre, g.contacto || '',
+                  g.turnos[0] || '', g.turnos[1] || '', g.turnos[2] || '', g.turnos[3] || '', g.turnos[4] || '', g.turnos[5] || '', g.turnos[6] || ''
+                ]);
+              }
+            }
+          }
+          console.log('Sembrado completado con éxito');
+        }
+      } catch (seedErr) {
+        console.error('Error sembrando datos:', seedErr.message);
+      }
+    }
+
     conn.release();
     console.log('Conectado a la base de datos');
   } catch (e) {
@@ -97,6 +165,88 @@ const hasRole = (roles) => (req, res, next) => {
 };
 
 // --- RUTAS API ---
+
+// --- PERSONAL Y HORARIOS ---
+
+// Obtener todos los ajustes de horarios guardados
+app.get('/api/horarios', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM personal_horarios');
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al obtener horarios' });
+  }
+});
+
+// Guardar o actualizar múltiples horarios
+app.post('/api/horarios', isAuthenticated, async (req, res) => {
+  const { entries } = req.body; // Array de objetos { escenario, gestor_nombre, turnos: [] }
+  if (!entries || !Array.isArray(entries)) {
+    return res.status(400).json({ error: 'Formato de datos inválido' });
+  }
+
+  try {
+    const connection = await pool.getConnection();
+    await connection.beginTransaction();
+
+    try {
+      const sql = `
+        INSERT INTO personal_horarios 
+        (escenario, gestor_nombre, contacto, lunes, martes, miercoles, jueves, viernes, sabado, domingo)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+        contacto = VALUES(contacto),
+        lunes = VALUES(lunes),
+        martes = VALUES(martes),
+        miercoles = VALUES(miercoles),
+        jueves = VALUES(jueves),
+        viernes = VALUES(viernes),
+        sabado = VALUES(sabado),
+        domingo = VALUES(domingo)
+      `;
+
+      for (const entry of entries) {
+        await connection.query(sql, [
+          entry.escenario,
+          entry.gestor_nombre,
+          entry.contacto || '',
+          entry.turnos[0],
+          entry.turnos[1],
+          entry.turnos[2],
+          entry.turnos[3],
+          entry.turnos[4],
+          entry.turnos[5],
+          entry.turnos[6]
+        ]);
+      }
+
+      await connection.commit();
+      res.json({ success: true, message: 'Horarios guardados correctamente' });
+    } catch (err) {
+      await connection.rollback();
+      throw err;
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al guardar horarios' });
+  }
+});
+
+// Eliminar un gestor de un escenario
+app.delete('/api/horarios/:escenario/:nombre', isAuthenticated, async (req, res) => {
+  const { escenario, nombre } = req.params;
+  try {
+    await pool.query('DELETE FROM personal_horarios WHERE escenario = ? AND gestor_nombre = ?', [escenario, nombre]);
+    res.json({ success: true, message: 'Gestor eliminado del escenario' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al eliminar gestor' });
+  }
+});
+
 app.get('/api/reservas', async (req, res) => {
   const { escenario_id } = req.query;
   try {
