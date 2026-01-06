@@ -4,14 +4,21 @@ const fs = require('fs');
 const bcrypt = require('bcrypt');
 
 const dbConfig = {
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'login_user',
-    password: process.env.DB_PASSWORD || '1234',
-    database: process.env.DB_NAME || 'login_db',
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     waitForConnections: true,
     connectionLimit: parseInt(process.env.DB_CONN_LIMIT) || 10,
     queueLimit: 0
 };
+
+// Validación crítica de seguridad
+if (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_PASSWORD || !process.env.DB_NAME) {
+    console.error('❌ ERROR CRÍTICO: Variables de entorno de base de datos faltantes.');
+    console.error('Por favor configure el archivo .env basado en .env.example');
+    process.exit(1);
+}
 
 // Crear el pool inmediatamente
 const pool = mysql.createPool(dbConfig);
@@ -122,7 +129,8 @@ async function initDb() {
         // Seed admin user
         const adminEmail = 'admin@test.com';
         const [adminRows] = await conn.query('SELECT * FROM users WHERE email = ?', [adminEmail]);
-        const hashed = await bcrypt.hash(process.env.ADMIN_PWD || 'admin123', 10);
+        const hashed = await bcrypt.hash(process.env.ADMIN_PWD || 'admin123_temp_insecure', 10);
+        if (!process.env.ADMIN_PWD) console.warn('⚠️ ADVERTENCIA: Usando contraseña de admin por defecto insegura. Configure ADMIN_PWD en .env');
         if (adminRows.length === 0) {
             await conn.query('INSERT INTO users (email, password, role) VALUES (?, ?, ?)', [adminEmail, hashed, 'admin']);
             console.log('Default admin user created');

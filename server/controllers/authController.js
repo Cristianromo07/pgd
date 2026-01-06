@@ -60,10 +60,13 @@ exports.forgotPassword = async (req, res, next) => {
         );
 
         const resetUrl = `http://localhost:5173/reset-password?token=${token}`;
-        console.log('------------------------------------------');
-        console.log(`LINK DE RECUPERACIÓN PARA ${email}:`);
-        console.log(resetUrl);
-        console.log('------------------------------------------');
+
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('------------------------------------------');
+            console.log(`LINK DE RECUPERACIÓN PARA ${email}:`);
+            console.log(resetUrl);
+            console.log('------------------------------------------');
+        }
 
         res.json({ success: true, message: 'Si el correo existe, se enviará un enlace de recuperación' });
     } catch (err) {
