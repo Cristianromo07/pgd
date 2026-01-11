@@ -32,12 +32,16 @@ body{
 .stack > * + * { margin-top: var(--gap); }
 
 input, select, textarea, button {
+  font-family: inherit;
+}
+
+/* Solo aplicar estilos genéricos si NO tienen clases de Tailwind o están dentro de formularios específicos legacy */
+.site-container input:not([class*='p-']), 
+.site-container button:not([class*='p-']) {
   font-size: 0.95rem;
-  padding: clamp(8px, 1.6vw, 12px);
+  padding: 8px 12px;
   border-radius: 6px;
   border: 1px solid #ddd;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 .calendar-wrapper{

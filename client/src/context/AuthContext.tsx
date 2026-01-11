@@ -59,8 +59,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             await api.post('/logout');
             setUser(null);
         } catch (err) {
-            console.error("Error logging out", err);
-            setUser(null); // Force logout anyway on front
+            console.error("Error al cerrar sesión", err);
+            setUser(null); // Forzar cierre de sesión en el frontend de todos modos
         }
     };
 

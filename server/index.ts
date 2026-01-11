@@ -1,4 +1,4 @@
-// server/index.ts - Entry point for the refactored layered architecture in TypeScript
+// server/index.ts - Punto de entrada para la arquitectura en capas refactorizada en TypeScript
 import 'dotenv/config';
 import express, { Express, Request, Response } from 'express';
 import path from 'path';
@@ -26,7 +26,7 @@ app.use(morgan('dev')); // 'dev' para logs coloridos en consola, 'combined' para
 
 // --- CONFIGURACIÓN CORS ---
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'],
+  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'],
   credentials: true
 }));
 

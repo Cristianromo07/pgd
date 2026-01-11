@@ -11,8 +11,17 @@ const DIAS_SEMANA = [
     { id: 0, label: 'D', full: 'Domingo' }
 ];
 
-export default function BookingModal({ isOpen, onClose, onSave, onDelete, initialData, scenarios }) {
-    const [formData, setFormData] = useState({
+interface BookingModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSave: (formData: any) => void;
+    onDelete: (id: number) => void;
+    initialData: any;
+    scenarios: any[];
+}
+
+export default function BookingModal({ isOpen, onClose, onSave, onDelete, initialData, scenarios }: BookingModalProps) {
+    const [formData, setFormData] = useState<any>({
         escenario_id: '',
         fecha: '',
         hora_inicio: '',
@@ -21,7 +30,6 @@ export default function BookingModal({ isOpen, onClose, onSave, onDelete, initia
         nombre_solicitante: '',
         telefono_solicitante: '',
         descripcion_actividad: '',
-        // Recurrencia
         repite: 'nunca',
         intervalo: 1,
         dias_semana: [],
@@ -56,46 +64,46 @@ export default function BookingModal({ isOpen, onClose, onSave, onDelete, initia
 
     if (!isOpen) return null;
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData((prev: any) => ({ ...prev, [name]: value }));
     };
 
-    const toggleDiaSemana = (dia) => {
-        setFormData(prev => {
+    const toggleDiaSemana = (dia: number) => {
+        setFormData((prev: any) => {
             const dias = prev.dias_semana.includes(dia)
-                ? prev.dias_semana.filter(d => d !== dia)
+                ? prev.dias_semana.filter((d: number) => d !== dia)
                 : [...prev.dias_semana, dia];
             return { ...prev, dias_semana: dias };
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         onSave(formData);
     };
 
     return (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[1000] p-4">
-            <div className="bg-white rounded-xl w-full max-w-lg shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-                <div className="bg-slate-800 p-4 text-white flex justify-between items-center">
-                    <h2 className="text-xl font-bold">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[1000] p-4 text-slate-800">
+            <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 border border-slate-200">
+                <div className="bg-slate-900 p-4 text-white flex justify-between items-center">
+                    <h2 className="text-sm font-bold uppercase tracking-tight">
                         {formData.id ? 'Editar Reserva' : 'Nueva Reserva'}
                     </h2>
-                    <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-6 space-y-5 overflow-y-auto max-h-[80vh]">
+                <form onSubmit={handleSubmit} className="p-5 space-y-4 overflow-y-auto max-h-[80vh]">
 
                     <div>
-                        <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Escenario</label>
+                        <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1 tracking-widest">Escenario</label>
                         <select
                             name="escenario_id"
                             value={formData.escenario_id}
                             onChange={handleChange}
-                            className="w-full rounded-lg border-gray-300 border p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                            className="w-full rounded-lg border-slate-200 border p-2 text-xs font-bold focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                             required
                         >
                             {scenarios.map(sc => (
@@ -104,90 +112,85 @@ export default function BookingModal({ isOpen, onClose, onSave, onDelete, initia
                         </select>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                            <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Nombre Solicitante</label>
+                            <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1 tracking-widest">Solicitante</label>
                             <input
                                 type="text"
                                 name="nombre_solicitante"
                                 value={formData.nombre_solicitante}
                                 onChange={handleChange}
                                 placeholder="Nombre completo"
-                                className="w-full rounded-lg border-gray-300 border p-2.5 outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full rounded-lg border-slate-200 border p-2 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500"
                                 required
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Teléfono</label>
+                            <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1 tracking-widest">Teléfono</label>
                             <input
                                 type="tel"
                                 name="telefono_solicitante"
                                 value={formData.telefono_solicitante}
                                 onChange={handleChange}
-                                placeholder="Ej: 3001234567"
-                                className="w-full rounded-lg border-gray-300 border p-2.5 outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="3xx..."
+                                className="w-full rounded-lg border-slate-200 border p-2 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500"
                                 required
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Descripción de la Actividad</label>
+                        <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1 tracking-widest">Descripción</label>
                         <textarea
                             name="descripcion_actividad"
                             value={formData.descripcion_actividad}
                             onChange={handleChange}
-                            placeholder="Ej: Clase de aeróbicos, Entrenamiento fútbol, etc."
-                            rows="2"
-                            className="w-full rounded-lg border-gray-300 border p-2.5 outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Tipo de actividad..."
+                            rows={2}
+                            className="w-full rounded-lg border-slate-200 border p-2 text-xs font-medium outline-none focus:ring-2 focus:ring-blue-500"
                             required
                         ></textarea>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="sm:col-span-1">
-                            <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Fecha</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1 tracking-widest">Fecha</label>
                             <input
                                 type="date"
                                 name="fecha"
                                 value={formData.fecha}
                                 onChange={handleChange}
-                                className="w-full rounded-lg border-gray-300 border p-2.5 outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full rounded-lg border-slate-200 border p-2 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500"
                                 required
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Inicio</label>
+                            <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1 tracking-widest">Inicio</label>
                             <input
                                 type="time"
                                 name="hora_inicio"
                                 value={formData.hora_inicio}
                                 onChange={handleChange}
-                                className="w-full rounded-lg border-gray-300 border p-2.5 outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full rounded-lg border-slate-200 border p-2 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500"
                                 required
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Fin</label>
+                            <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1 tracking-widest">Fin</label>
                             <input
                                 type="time"
                                 name="hora_fin"
                                 value={formData.hora_fin}
                                 onChange={handleChange}
-                                className="w-full rounded-lg border-gray-300 border p-2.5 outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full rounded-lg border-slate-200 border p-2 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500"
                                 required
                             />
                         </div>
                     </div>
 
-                    {/* Sección de Recurrencia */}
                     {!formData.id && (
-                        <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-                            <div className="flex items-center gap-2 mb-3">
-                                <svg className="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                                <span className="text-sm font-bold text-slate-700">Repetir</span>
-                            </div>
-
+                        <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                            <label className="block text-[10px] font-bold uppercase text-slate-400 mb-2 tracking-widest">Repetición</label>
                             <select
                                 name="repite"
                                 value={formData.repite}
@@ -196,7 +199,7 @@ export default function BookingModal({ isOpen, onClose, onSave, onDelete, initia
                                     if (e.target.value === 'custom') setShowCustomRecurrence(true);
                                     else setShowCustomRecurrence(false);
                                 }}
-                                className="w-full rounded-lg border-gray-300 border p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full rounded-lg border-slate-200 border p-2 text-[11px] font-bold outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                             >
                                 <option value="nunca">No se repite</option>
                                 <option value="diario">Cada día</option>
@@ -207,31 +210,30 @@ export default function BookingModal({ isOpen, onClose, onSave, onDelete, initia
 
                             {(formData.repite !== 'nunca' || showCustomRecurrence) && (
                                 <div className="mt-4 space-y-4 animate-in fade-in duration-300">
-                                    <div className="flex items-center gap-2 text-sm">
-                                        <span>Repetir cada</span>
+                                    <div className="flex items-center gap-2 text-xs font-bold">
+                                        <span>Cada</span>
                                         <input
                                             type="number"
                                             name="intervalo"
                                             min="1"
                                             value={formData.intervalo}
                                             onChange={handleChange}
-                                            className="w-16 rounded border-gray-300 p-1 text-center"
+                                            className="w-12 rounded border-slate-200 p-1 text-center font-bold"
                                         />
                                         <span>{formData.repite === 'diario' ? 'días' : formData.repite === 'mensual' ? 'meses' : 'semanas'}</span>
                                     </div>
 
                                     {(formData.repite === 'semanal' || formData.repite === 'custom') && (
                                         <div>
-                                            <p className="text-xs font-bold text-gray-500 mb-2 uppercase">Repetir el</p>
-                                            <div className="flex justify-between">
+                                            <div className="flex justify-between gap-1">
                                                 {DIAS_SEMANA.map(dia => (
                                                     <button
                                                         key={dia.id}
                                                         type="button"
                                                         onClick={() => toggleDiaSemana(dia.id)}
-                                                        className={`w-9 h-9 rounded-full text-xs font-bold border transition-all ${formData.dias_semana.includes(dia.id)
-                                                            ? 'bg-blue-600 border-blue-600 text-white shadow-md scale-110'
-                                                            : 'bg-white border-gray-200 text-gray-600 hover:border-blue-400'
+                                                        className={`w-7 h-7 rounded-lg text-[10px] font-bold border transition-all ${formData.dias_semana.includes(dia.id)
+                                                            ? 'bg-blue-600 border-blue-600 text-white shadow-sm'
+                                                            : 'bg-white border-slate-200 text-slate-400 hover:border-slate-300'
                                                             }`}
                                                         title={dia.full}
                                                     >
@@ -243,18 +245,17 @@ export default function BookingModal({ isOpen, onClose, onSave, onDelete, initia
                                     )}
 
                                     <div className="pt-3 border-t border-slate-200">
-                                        <p className="text-xs font-bold text-gray-500 mb-2 uppercase">Termina</p>
                                         <div className="space-y-2">
-                                            <label className="flex items-center gap-3 text-sm cursor-pointer">
+                                            <label className="flex items-center gap-2 text-[10px] font-bold cursor-pointer">
                                                 <input
                                                     type="radio"
                                                     name="fin_tipo"
                                                     value="repeticiones"
                                                     checked={formData.fin_tipo === 'repeticiones'}
                                                     onChange={handleChange}
-                                                    className="w-4 h-4 text-blue-600"
+                                                    className="w-3 h-3 text-blue-600"
                                                 />
-                                                <span>Después de</span>
+                                                <span>Finaliza tras</span>
                                                 <input
                                                     type="number"
                                                     name="fin_repeticiones"
@@ -262,28 +263,28 @@ export default function BookingModal({ isOpen, onClose, onSave, onDelete, initia
                                                     value={formData.fin_repeticiones}
                                                     onChange={handleChange}
                                                     disabled={formData.fin_tipo !== 'repeticiones'}
-                                                    className="w-16 rounded border-gray-300 p-1 text-center disabled:opacity-50"
+                                                    className="w-12 rounded border-slate-200 p-0.5 text-center disabled:opacity-50 text-[10px]"
                                                 />
                                                 <span>veces</span>
                                             </label>
 
-                                            <label className="flex items-center gap-3 text-sm cursor-pointer">
+                                            <label className="flex items-center gap-2 text-[10px] font-bold cursor-pointer">
                                                 <input
                                                     type="radio"
                                                     name="fin_tipo"
                                                     value="fecha"
                                                     checked={formData.fin_tipo === 'fecha'}
                                                     onChange={handleChange}
-                                                    className="w-4 h-4 text-blue-600"
+                                                    className="w-3 h-3 text-blue-600"
                                                 />
-                                                <span>El día</span>
+                                                <span>Finaliza el día</span>
                                                 <input
                                                     type="date"
                                                     name="fin_fecha"
                                                     value={formData.fin_fecha}
                                                     onChange={handleChange}
                                                     disabled={formData.fin_tipo !== 'fecha'}
-                                                    className="rounded border-gray-300 p-1 outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50"
+                                                    className="rounded border-slate-200 p-0.5 outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 text-[10px]"
                                                 />
                                             </label>
                                         </div>
@@ -294,13 +295,13 @@ export default function BookingModal({ isOpen, onClose, onSave, onDelete, initia
                     )}
 
                     <div>
-                        <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Color / Categoría</label>
+                        <label className="block text-[10px] font-bold uppercase text-slate-400 mb-2 tracking-widest">Iconografía</label>
                         <div className="flex gap-3">
                             {COLORS.map(c => (
                                 <button
                                     key={c}
                                     type="button"
-                                    className={`w-9 h-9 rounded-full border-2 transition-all hover:scale-110 shadow-sm ${formData.color === c ? 'border-slate-800 ring-2 ring-slate-400' : 'border-transparent'
+                                    className={`w-7 h-7 rounded-full border-2 transition-all hover:scale-110 shadow-sm ${formData.color === c ? 'border-slate-800 ring-2 ring-slate-200' : 'border-transparent'
                                         }`}
                                     style={{ backgroundColor: getColorHex(c) }}
                                     onClick={() => setFormData({ ...formData, color: c })}
@@ -310,12 +311,12 @@ export default function BookingModal({ isOpen, onClose, onSave, onDelete, initia
                         </div>
                     </div>
 
-                    <div className="flex justify-end gap-3 pt-4 border-t sticky bottom-0 bg-white">
+                    <div className="flex justify-end gap-2 pt-4 border-t sticky bottom-0 bg-white">
                         {formData.id && (
                             <button
                                 type="button"
                                 onClick={() => onDelete(formData.id)}
-                                className="px-5 py-2.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 font-bold transition-colors mr-auto"
+                                className="px-3 py-1.5 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 font-bold text-[10px] uppercase transition-colors mr-auto border border-rose-100"
                             >
                                 Eliminar
                             </button>
@@ -323,15 +324,15 @@ export default function BookingModal({ isOpen, onClose, onSave, onDelete, initia
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-5 py-2.5 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 font-bold transition-colors"
+                            className="px-3 py-1.5 bg-slate-50 text-slate-500 rounded-lg hover:bg-slate-100 font-bold text-[10px] uppercase transition-colors border border-slate-200"
                         >
                             Cancelar
                         </button>
                         <button
                             type="submit"
-                            className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold shadow-lg shadow-blue-200 transition-all active:scale-95"
+                            className="px-4 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold text-[10px] uppercase shadow-sm transition-all active:scale-95"
                         >
-                            {formData.id ? 'Actualizar' : 'Crear Reserva'}
+                            {formData.id ? 'Actualizar' : 'Guardar'}
                         </button>
                     </div>
                 </form>
@@ -340,8 +341,8 @@ export default function BookingModal({ isOpen, onClose, onSave, onDelete, initia
     );
 }
 
-function getColorHex(colorName) {
-    const map = {
+function getColorHex(colorName: string) {
+    const map: any = {
         rojo: '#ef4444',
         azul: '#3b82f6',
         amarillo: '#eab308',

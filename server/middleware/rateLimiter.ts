@@ -1,4 +1,4 @@
-const rateLimit = require('express-rate-limit');
+import rateLimit from 'express-rate-limit';
 
 // Detectar si estamos en Producción o Desarrollo
 // Si NODE_ENV no está definido, asumimos desarrollo.
@@ -15,7 +15,7 @@ const authConfigs = {
 console.log(` Rate Limiter configurado en modo: ${isDev ? 'DESARROLLO (Relajado)' : 'PRODUCCIÓN (Estricto)'}`);
 
 // Limiter para endpoints de autenticación (Login/Register)
-const authLimiter = rateLimit({
+export const authLimiter = rateLimit({
     windowMs: authConfigs.windowMs,
     max: authConfigs.max,
     message: {
@@ -27,10 +27,8 @@ const authLimiter = rateLimit({
 });
 
 // Limiter general para API
-const apiLimiter = rateLimit({
+export const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: isDev ? 1000 : 100, // API más permisiva en desarrollo
     message: { error: 'Límite de peticiones API excedido' }
 });
-
-module.exports = { authLimiter, apiLimiter };
