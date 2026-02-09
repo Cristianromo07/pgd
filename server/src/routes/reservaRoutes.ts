@@ -8,6 +8,5 @@ router.get('/reservas', reservaController.getReservas);
 router.post('/reservas', isAuthenticated, reservaController.createReserva);
 router.put('/reservas/:id', isAuthenticated, reservaController.updateReserva);
 router.delete('/reservas/:id', isAuthenticated, reservaController.deleteReserva);
-router.get('/escenarios', reservaController.getEscenarios);
 
 export default router;

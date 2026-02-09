@@ -26,13 +26,13 @@ export interface ActiveGap {
 export const DAYS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
 export const TURNO_PRESETS = [
-    "6:00 1:30",
-    "2:30 10:00",
+    "6 AM – 1 PM",
+    "12 PM – 7 PM",
     "DESCANSO",
-    "INCAPACITADA",
+    "INCAPACIDAD",
     "VACACIONES",
-    "CICLOVIA",
-    "D. PROGRAMADO"
+    "CICLOVÍA",
+    "DÍA PROGRAMADO"
 ];
 
 export const ALLOWED_ESCENARIOS = [

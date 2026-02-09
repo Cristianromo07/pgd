@@ -1,16 +1,17 @@
-// HorarioGestor.tsx - Gestión de turnos y gestores (Vista Fija)
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import * as XLSX from 'xlsx';
 import api from '../../../api';
 import { exportToExcel } from '../../../utils/exportUtils';
-import { Search, UserPlus, Trash2, Edit2, Save, ArrowLeft, X, Phone, FileDown, AlertTriangle, AlertCircle } from 'lucide-react';
+import { Search, UserPlus, Trash2, Edit2, Save, ArrowLeft, X, Phone, FileDown, AlertTriangle, AlertCircle, Upload, Layout } from 'lucide-react';
 import { normalize } from '../../../utils/stringUtils';
 import { Gestor, EscenarioData, ActiveGap, DAYS, TURNO_PRESETS } from '../../../types/horario';
 import ReplacementModal from '../components/ReplacementModal';
-import AddGestorModal from '../components/AddGestorModal';
+import ManageEscenariosModal from '../components/ManageEscenariosModal';
 
 export default function HorarioGestor() {
     const navigate = useNavigate();
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Estados simplificados
     const [searchTerm, setSearchTerm] = useState('');
@@ -18,7 +19,7 @@ export default function HorarioGestor() {
     const [filterEmpty, setFilterEmpty] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [showAddModal, setShowAddModal] = useState(false);
+    const [showEscenariosModal, setShowEscenariosModal] = useState(false);
     const [showReplacementModal, setShowReplacementModal] = useState(false);
     const [activeGap, setActiveGap] = useState<ActiveGap | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -82,12 +83,26 @@ export default function HorarioGestor() {
             if (normalize(item.escenario) !== 'ciclovia') {
                 for (let i = 0; i < 7; i++) {
                     ['MAÑANA', 'TARDE'].forEach(shift => {
-                        const shiftKey = shift === 'MAÑANA' ? '6:00' : '2:30';
-                        const directCover = item.gestores.some(g => (g.turnos[i] || '').toUpperCase().includes(shiftKey));
+                        const shiftKey = shift === 'MAÑANA' ? '6 AM' : '12 PM';
+
+                        // Cobertura Directa: El gestor está en este escenario y tiene el turno, 
+                        // pero NO tiene el nombre de OTRO escenario en su turno.
+                        const directCover = item.gestores.some(g => {
+                            const t = (g.turnos[i] || '').toUpperCase();
+                            if (!t.includes(shiftKey)) return false;
+
+                            // Si el turno menciona otra sede, entonces no está cubriendo esta sede
+                            const coversOther = allEscenarios.some(esc =>
+                                esc.nombre !== item.escenario && t.includes(esc.nombre.toUpperCase())
+                            );
+                            return !coversOther;
+                        });
 
                         let crossCover = false;
                         if (!directCover) {
+                            // Cobertura Cruzada: Algún gestor de OTRA sede está asignado a esta sede
                             data.forEach(otherEsc => {
+                                if (otherEsc.escenario === item.escenario) return;
                                 otherEsc.gestores.forEach(g => {
                                     const t = (g.turnos[i] || '').toUpperCase();
                                     if (t.includes(shiftKey) && t.includes(item.escenario.toUpperCase())) {
@@ -157,15 +172,39 @@ export default function HorarioGestor() {
         return [0, 1, 2, 3, 4, 5, 6].filter(i => i >= currentDayIdx);
     }, [hidePassedDays, currentDayIdx]);
 
-    const handleUpdate = (escIdx: number, gIdx: number, field: string, val: string, dayIdx: number | null = null) => {
-        const newData = [...data];
-        if (dayIdx !== null) {
-            newData[escIdx].gestores[gIdx].turnos[dayIdx] = val;
-        } else {
-            (newData[escIdx].gestores[gIdx] as any)[field] = val;
-        }
-        setData([...newData]);
-        setDirtyRows(prev => new Set(prev).add(`${newData[escIdx].escenario}-${newData[escIdx].gestores[gIdx].nombre}`));
+    const handleUpdate = (escName: string, gestorName: string, field: string, val: string, dayIdx: number | null = null) => {
+        setData(prevData => prevData.map(esc => {
+            if (esc.escenario !== escName) return esc;
+            return {
+                ...esc,
+                gestores: esc.gestores.map(g => {
+                    if (g.nombre !== gestorName) return g;
+                    const updatedG = { ...g };
+                    if (dayIdx !== null) {
+                        const newTurnos = [...g.turnos];
+                        newTurnos[dayIdx] = val;
+                        updatedG.turnos = newTurnos;
+                    } else {
+                        (updatedG as any)[field] = val;
+                    }
+                    return updatedG;
+                })
+            };
+        }));
+        setDirtyRows(prev => new Set(prev).add(`${escName}-${gestorName}`));
+    };
+
+    const calculateTotalHours = (turnos: string[]) => {
+        let total = 0;
+        turnos.forEach(t => {
+            const v = (t || '').toUpperCase();
+            if (v.includes('6 AM') || v.includes('12 PM')) {
+                total += 7;
+            } else if (v.includes('CICLOVÍA')) {
+                total += 8;
+            }
+        });
+        return total;
     };
 
     const handleSave = async () => {
@@ -223,6 +262,45 @@ export default function HorarioGestor() {
         } catch (err: any) { alert("Error al registrar: " + (err.response?.data?.error || err.message)); }
     };
 
+    const handleImportExcel = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = async (evt) => {
+            try {
+                const bstr = evt.target?.result;
+                const wb = XLSX.read(bstr, { type: 'binary' });
+                const wsname = wb.SheetNames[0];
+                const ws = wb.Sheets[wsname];
+                const rawData: any[] = XLSX.utils.sheet_to_json(ws);
+
+                if (rawData.length === 0) return alert("El archivo está vacío");
+
+                const mappedData = rawData.map(row => ({
+                    escenario: (row.escenario || '').toString().trim(),
+                    gestor_nombre: (row.funcionario || '').toString().toUpperCase().trim(),
+                    contacto: (row.contacto || '').toString().trim(),
+                    turnos: ["", "", "", "", "", "", ""],
+                    fecha_inicio: '2000-01-01'
+                })).filter(r => r.gestor_nombre && r.escenario);
+
+                if (mappedData.length === 0) return alert("No se encontraron datos válidos con las columnas 'funcionario', 'contacto' y 'escenario'");
+
+                if (!window.confirm(`¿Deseas importar ${mappedData.length} gestores?`)) return;
+
+                await api.post('/horarios', { entries: mappedData });
+                alert("Importación completada con éxito");
+                loadData();
+            } catch (err: any) {
+                console.error("Error importando Excel:", err);
+                alert("Error al procesar el archivo Excel: " + err.message);
+            }
+        };
+        reader.readAsBinaryString(file);
+        if (fileInputRef.current) fileInputRef.current.value = '';
+    };
+
     const handleAssignReplacement = async (gestor: Gestor) => {
         if (!activeGap) return;
         let sourceEntry: any = null;
@@ -235,7 +313,7 @@ export default function HorarioGestor() {
         }
         if (!sourceEntry) return;
 
-        const baseShift = activeGap.shift === 'MAÑANA' ? '6:00 1:30' : '2:30 10:00';
+        const baseShift = activeGap.shift === 'MAÑANA' ? '6 AM – 1 PM' : '12 PM – 7 PM';
         const newTurnos = [...sourceEntry.turnos];
         const currentVal = (newTurnos[activeGap.day] || '');
         newTurnos[activeGap.day] = currentVal.toUpperCase().includes(baseShift)
@@ -263,7 +341,7 @@ export default function HorarioGestor() {
         if (v.includes('DES')) return 'bg-rose-50 text-rose-700 border-rose-200';
         if (v.includes('INC')) return 'bg-amber-50 text-amber-700 border-amber-200';
         if (v.includes('VAC')) return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-        return (v.includes('6:0') || v.includes('2:3'))
+        return (v.includes('6 AM') || v.includes('12 PM') || v.includes('CICLOVÍA'))
             ? 'bg-white text-black border-slate-200'
             : 'bg-blue-50 text-blue-800 border-blue-200 shadow-sm';
     };
@@ -302,18 +380,23 @@ export default function HorarioGestor() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <button
-                        onClick={() => setHidePassedDays(!hidePassedDays)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 border rounded-md font-bold text-[10px] uppercase transition-all shadow-sm ${hidePassedDays ? 'bg-indigo-600 text-white border-indigo-700' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
-                    >
-                        {hidePassedDays ? 'Mostrar Todo' : 'Ocultar Pasados'}
+                    <button onClick={() => setShowEscenariosModal(true)} className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-700 border border-slate-200 rounded-md font-bold text-[10px] uppercase hover:bg-white transition-all shadow-sm">
+                        <Layout size={14} className="text-indigo-600" /> Sedes
                     </button>
+
+                    <input type="file" ref={fileInputRef} onChange={handleImportExcel} accept=".xlsx,.xls" className="hidden" />
+                    <button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-slate-600 border border-slate-200 rounded-md font-bold text-[10px] uppercase hover:bg-slate-50 transition-all shadow-sm">
+                        <Upload size={14} className="text-blue-600" /> Importar
+                    </button>
+
                     <button onClick={handleExportExcel} className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-slate-600 border border-slate-200 rounded-md font-bold text-[10px] uppercase hover:bg-slate-50 transition-all shadow-sm">
                         <FileDown size={14} className="text-emerald-600" /> Excel
                     </button>
+
                     <button onClick={() => setShowAddForm(!showAddForm)} className={`flex items-center gap-1.5 px-3 py-1.5 border rounded-md font-bold text-[10px] uppercase transition-all shadow-sm ${showAddForm ? 'bg-rose-600 text-white border-rose-700' : 'bg-slate-800 text-white border-slate-900 hover:bg-slate-900'}`}>
                         {showAddForm ? <X size={14} /> : <UserPlus size={14} />} {showAddForm ? 'Cerrar' : 'Nuevo'}
                     </button>
+
                     {isEditMode ? (
                         <button onClick={handleSave} className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-md font-bold text-[10px] uppercase shadow-md animate-pulse">
                             <Save size={14} /> Guardar
@@ -390,6 +473,7 @@ export default function HorarioGestor() {
                                 <tr className="bg-slate-900 text-white">
                                     <th className="w-[180px] p-3 text-[10px] font-bold uppercase text-left sticky left-0 bg-slate-900 z-50">Sede</th>
                                     <th className="w-[180px] p-3 text-[10px] font-bold uppercase text-left sticky left-[180px] bg-slate-900 z-50 shadow-[2px_0_5px_rgba(0,0,0,0.2)]">Funcionario</th>
+                                    <th className="w-[70px] p-3 text-[10px] font-bold uppercase text-center bg-indigo-900">Total</th>
                                     <th className="w-[110px] p-3 text-[10px] font-bold uppercase text-center">Contacto</th>
                                     {visibleDaysIdx.map(i => <th key={DAYS[i]} className="p-3 text-[10px] font-bold uppercase text-center">{DAYS[i]}</th>)}
                                     {isEditMode && <th className="w-[70px] bg-red-900/50 text-[10px] font-bold text-center uppercase">Acción</th>}
@@ -400,7 +484,7 @@ export default function HorarioGestor() {
                                     <React.Fragment key={item.escenario}>
                                         {/* Separador de Escenario Azul Tenue */}
                                         <tr className="bg-blue-50/60 border-y border-blue-100">
-                                            <td colSpan={visibleDaysIdx.length + (isEditMode ? 4 : 3)} className="px-4 py-2 sticky left-0 z-20">
+                                            <td colSpan={visibleDaysIdx.length + (isEditMode ? 5 : 4)} className="px-4 py-2 sticky left-0 z-20">
                                                 <div className="flex items-center gap-2">
                                                     <div className="w-1.5 h-4 bg-blue-500 rounded-full"></div>
                                                     <span className="text-[11px] font-black text-blue-900 uppercase tracking-wider">{item.escenario}</span>
@@ -414,9 +498,12 @@ export default function HorarioGestor() {
                                                 <tr key={`${item.escenario}-${g.nombre}`} className="bg-white transition-all hover:bg-slate-50 group">
                                                     <td className="p-3 sticky left-0 bg-white z-20 font-bold text-[10px] uppercase text-slate-400 border-r border-slate-50">{item.escenario}</td>
                                                     <td className="p-3 sticky left-[180px] bg-white z-20 font-bold text-[11px] uppercase text-slate-900 border-r border-slate-50 shadow-[1px_0_3px_rgba(0,0,0,0.05)]">{g.nombre}</td>
+                                                    <td className="p-2 border-r border-slate-50 text-center bg-indigo-50/30">
+                                                        <span className="text-[12px] font-black text-indigo-700">{calculateTotalHours(g.turnos)}h</span>
+                                                    </td>
                                                     <td className="p-2 border-r border-slate-50 text-center">
                                                         {isEditMode ? (
-                                                            <input type="text" className="w-full p-1.5 bg-white border border-slate-200 rounded text-[10px] font-bold text-center text-slate-800 outline-none" value={g.contacto} onChange={e => handleUpdate(data.indexOf(item), gIdx, 'contacto', e.target.value)} />
+                                                            <input type="text" className="w-full p-1.5 bg-white border border-slate-200 rounded text-[10px] font-bold text-center text-slate-800 outline-none" value={g.contacto} onChange={e => handleUpdate(item.escenario, g.nombre, 'contacto', e.target.value)} />
                                                         ) : (
                                                             <div className="flex items-center justify-center gap-1.5">
                                                                 <Phone size={11} className="text-slate-400" />
@@ -431,12 +518,12 @@ export default function HorarioGestor() {
                                                                 {isEditMode ? (
                                                                     <div className="flex flex-col gap-1">
                                                                         <select className="w-full p-1 bg-white border border-slate-200 rounded text-[9px] font-bold text-center" value={TURNO_PRESETS.includes(t) ? t : "custom"} onChange={e => {
-                                                                            if (e.target.value !== "custom") handleUpdate(data.indexOf(item), gIdx, 'turnos', e.target.value, tIdx);
+                                                                            if (e.target.value !== "custom") handleUpdate(item.escenario, g.nombre, 'turnos', e.target.value, tIdx);
                                                                         }}>
                                                                             <option value="custom">✍️ EDITAR</option>
                                                                             {TURNO_PRESETS.map(p => <option key={p} value={p}>{p}</option>)}
                                                                         </select>
-                                                                        <input type="text" className="w-full p-1 bg-slate-50 border border-slate-100 rounded text-[9px] font-bold text-center uppercase" value={t} onChange={e => handleUpdate(data.indexOf(item), gIdx, 'turnos', e.target.value, tIdx)} />
+                                                                        <input type="text" className="w-full p-1 bg-slate-50 border border-slate-100 rounded text-[9px] font-bold text-center uppercase" value={t} onChange={e => handleUpdate(item.escenario, g.nombre, 'turnos', e.target.value, tIdx)} />
                                                                     </div>
                                                                 ) : (
                                                                     <div className={`mx-auto p-2 rounded border text-[10px] font-bold text-center leading-none min-w-[95px] shadow-sm uppercase ${getTurnoStyle(t)}`}>
@@ -459,7 +546,7 @@ export default function HorarioGestor() {
                                             <tr className="bg-white">
                                                 <td className="p-3 sticky left-0 bg-white z-20 font-bold text-[10px] uppercase text-slate-300 border-r border-slate-50">{item.escenario}</td>
                                                 <td className="p-3 sticky left-[180px] bg-white z-20 font-bold text-[10px] uppercase text-slate-300 border-r border-slate-50">---</td>
-                                                <td colSpan={visibleDaysIdx.length + (isEditMode ? 2 : 1)} className="p-3 text-center">
+                                                <td colSpan={visibleDaysIdx.length + (isEditMode ? 3 : 2)} className="p-3 text-center">
                                                     <div className="flex items-center justify-center gap-2 py-1 bg-slate-50/50 rounded-lg border border-dashed border-slate-200">
                                                         <AlertCircle className="text-slate-300" size={16} />
                                                         <span className="text-slate-400 font-bold uppercase text-[10px] italic tracking-widest">Sede sin personal asignado</span>
@@ -473,6 +560,7 @@ export default function HorarioGestor() {
                                             <tr className="bg-white border-t border-slate-100">
                                                 <td className="p-3 sticky left-0 bg-white z-20 border-r-2 border-red-400 font-bold text-[10px] text-red-500 uppercase italic">⚠️ Alerta</td>
                                                 <td className="p-3 sticky left-[180px] bg-white z-20 font-bold text-[10px] text-slate-400 uppercase border-r border-slate-50">Sin Cobertura:</td>
+                                                <td className="border-r border-slate-50 bg-indigo-50/10"></td>
                                                 <td className="border-r border-slate-50"></td>
                                                 {visibleDaysIdx.map(i => {
                                                     const dayGaps = item.gaps.filter(g => g.day === i);
@@ -509,6 +597,7 @@ export default function HorarioGestor() {
             </main>
 
             <ReplacementModal isOpen={showReplacementModal} onClose={() => setShowReplacementModal(false)} activeGap={activeGap} data={data} onAssign={handleAssignReplacement} />
+            <ManageEscenariosModal isOpen={showEscenariosModal} onClose={() => setShowEscenariosModal(false)} onUpdated={loadData} />
         </div>
     );
 }

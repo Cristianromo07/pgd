@@ -37,7 +37,7 @@ const ReplacementModal: React.FC<ReplacementModalProps> = ({
             });
         });
 
-        const targetShiftKey = activeGap.shift === 'MAÑANA' ? '6:00' : '2:30';
+        const targetShiftKey = activeGap.shift === 'MAÑANA' ? '6 AM' : '12 PM';
 
         return allUniqueGestores.filter(g => {
             let isBlockingStatus = false;
@@ -52,7 +52,7 @@ const ReplacementModal: React.FC<ReplacementModalProps> = ({
                         // Estados que impiden el reemplazo
                         if (currentDayTurno.includes('DESCANSO') ||
                             currentDayTurno.includes('VACACIONES') ||
-                            currentDayTurno.includes('INCAPACITADA')) {
+                            currentDayTurno.includes('INCAPACIDAD')) {
                             isBlockingStatus = true;
                         }
                         // Impedir si ya tiene un turno diferente ese mismo día

@@ -3,6 +3,7 @@ import authRoutes from './authRoutes';
 import reservaRoutes from './reservaRoutes';
 import horarioRoutes from './horarioRoutes';
 import novedadRoutes from './novedadRoutes';
+import escenarioRoutes from './escenarioRoutes';
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.use(authRoutes);
 router.use(reservaRoutes);
 router.use(horarioRoutes);
 router.use(novedadRoutes);
+router.use(escenarioRoutes);
 
 export default router;
