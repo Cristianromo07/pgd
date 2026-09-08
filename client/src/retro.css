@@ -1,0 +1,150 @@
+/* ============================================================================
+   THEME "RETRO ADMIN" - estética de panel administrativo PHP de los 2000
+   Se carga al final (después de index.css y responsive.css) para ganar
+   precedencia y transformar la app completa sin tocar cada componente.
+   ============================================================================ */
+
+/* --- Base: tipografía clásica, fondo gris, sin padding global --- */
+html {
+    font-size: 14px;
+}
+
+body {
+    background: #e7e9eb;
+    color: #232a33;
+    font-family: Tahoma, "Trebuchet MS", Verdana, Geneva, Arial, sans-serif;
+    padding: 0;
+    line-height: 1.4;
+}
+
+button, input, select, textarea {
+    font-family: inherit;
+}
+
+/* --- Formas cuadradas (nada de bordes redondeados "modernos") --- */
+*,
+*::before,
+*::after {
+    border-radius: 0 !important;
+}
+
+/* --- Quitar sombras difuminadas; paneles planos con borde fino --- */
+.shadow-sm,
+.shadow,
+.shadow-md,
+.shadow-lg,
+.shadow-xl,
+.shadow-2xl,
+.shadow-inner {
+    box-shadow: none !important;
+}
+
+/* --- Superficies oscuras -> azul marino institucional clásico --- */
+.bg-slate-900 {
+    background-color: #14315a !important;
+}
+.hover\:bg-slate-900:hover {
+    background-color: #0f2547 !important;
+}
+.bg-slate-950 {
+    background-color: #0e1f3a !important;
+}
+
+/* --- Borde entre sidebar y contenido, más clásico --- */
+.border-slate-800 {
+    border-color: #263952 !important;
+}
+.hover\:border-slate-800:hover {
+    border-color: #334a68 !important;
+}
+
+/* --- Enlaces tipo web clásica (subrayados) --- */
+a {
+    color: #1a4fa0;
+}
+a:hover {
+    color: #0c2f66;
+}
+
+/* --- Formularios: inputs con borde sobrio y fondo blanco --- */
+input, select, textarea {
+    background-color: #ffffff !important;
+}
+
+/* Inputs con fondo gris suave actual pasan a blanco legible */
+.bg-slate-50,
+.bg-slate-100 {
+    background-color: #f1f3f5 !important;
+}
+
+/* --- Separadores con algo más de presencia --- */
+.border-slate-200 {
+    border-color: #c2cad3 !important;
+}
+.border-slate-100 {
+    border-color: #d8dde3 !important;
+}
+.border-slate-300 {
+    border-color: #a9b3bf !important;
+}
+
+/* ============================================================================
+   FullCalendar: grilla con líneas visibles tipo agenda clásica
+   (mayor especificidad que el <style> inline de la página)
+   ============================================================================ */
+body .calendar-premium .fc {
+    --fc-border-color: #a5aeb8 !important;
+    --fc-today-bg-color: #fdf2c9 !important;
+    --fc-button-bg-color: #e2e7ec !important;
+    --fc-button-border-color: #79838e !important;
+    --fc-button-text-color: #1d2834 !important;
+    --fc-button-hover-bg-color: #cdd6df !important;
+    --fc-button-hover-border-color: #5f6a76 !important;
+    --fc-button-active-bg-color: #20518f !important;
+    --fc-button-active-border-color: #143357 !important;
+    --fc-event-bg-color: #20518f !important;
+    --fc-event-border-color: #20518f !important;
+    font-family: Tahoma, "Trebuchet MS", Verdana, sans-serif !important;
+    font-size: 12px !important;
+}
+
+body .calendar-premium .fc .fc-col-header-cell {
+    background: #d7e1ee !important;
+}
+
+body .calendar-premium .fc .fc-col-header-cell-cushion {
+    color: #14315a !important;
+    font-weight: bold !important;
+}
+
+body .calendar-premium .fc .fc-toolbar-title {
+    color: #14315a !important;
+}
+
+body .calendar-premium .fc-event {
+    box-shadow: none !important;
+    border: 1px solid #14315a !important;
+}
+
+/* --- Barras de títulos internas (encabezados de paneles) más clásicas --- */
+.uppercase.tracking-widest,
+.uppercase.tracking-wider {
+    letter-spacing: 0.08em;
+}
+
+/* --- Scrollbars cuadradas y discretas --- */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #9aa4ae #e7e9eb;
+}
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+    background: #9aa4ae;
+    border: 2px solid #e7e9eb;
+}
+*::-webkit-scrollbar-track {
+    background: #e7e9eb;
+}
